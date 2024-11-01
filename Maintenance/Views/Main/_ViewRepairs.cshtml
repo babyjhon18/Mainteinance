@@ -104,7 +104,7 @@
                                                         </button>
                                                     </li>
                                                 }
-                                                @if (row.Status != "accepted" && row.Status != "ready")
+                                                @if (row.Status == "inprogress")
                                                 {
                                                     <li>
                                                         <button data-id-device="@row.Id" data-id-product="@row.ProductId.ToString()" status="@row.Status" value="Repair/EditJobs" title="Выполненные работы" class="">
