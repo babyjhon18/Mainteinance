@@ -1,0 +1,54 @@
+﻿@model Project.Models.ResponsiblePersonsProperties
+@{
+    Layout = null;
+}
+<div class="modal-dialog">
+    <div class="modal-content">
+        @using (Html.BeginForm("UpdatePerson", "Indicator", FormMethod.Post, new { @class = "form-horizontal", @id = "UpdateIndicatorsForm", @role = "form" }))
+        {
+            @Html.HiddenFor(model => model.id)
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title"><i class="fa fa-plus"></i> Редактировать ремонтника</h5>
+            </div>
+            <div class="modal-body">
+                    <div class="form-group">
+                        <label for="FullName" class="col-lg-4 control-label">ФИО</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Наименование" id="ClientName" name="ClientName" value="" required />*@@Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @required = true, @class = "form-control", @placeholder = "ФИО" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sellaryPerMonth" class="col-lg-4 control-label">Должностной оклад</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Адрес" id="ClientAddress" name="ClientAddress" value=" " required/>*@@Html.EditorFor(model => model.sellaryPerMonth, new { htmlAttributes = new { @class = "form-control", @placeholder = "Должностной оклад" } })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="avgWorkTime" class="col-lg-4 control-label">Средняя норма рабочего времени</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Расчетный счет" id="ClientCheckingAccount" name="ClientCheckingAccount" value=" " required/>*@@Html.EditorFor(model => model.avgWorkTime, new { htmlAttributes = new {@class = "form-control", @placeholder = "Средняя норма рабочего времени" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="hourPrice" class="col-lg-4 control-label">Стоимость 1 часа</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Банк" id="ClientBank" name="ClientBank" value=" " required />*@@Html.EditorFor(model => model.hourPrice, new { htmlAttributes = new { @class = "form-control", @placeholder = "Стоимость 1 часа" } })
+                        </div>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Отмена</button>
+                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Сохранить изменения</button>
+
+            </div>
+        }
+    </div>
+</div>
+<style>
+    .col-lg-8 {
+        color: black;
+        font-size: 12px;
+    }
+</style>

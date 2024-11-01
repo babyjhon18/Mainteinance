@@ -1,0 +1,133 @@
+﻿@model IEnumerable<Project.Models.Accessories>
+
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h4 class="report_header"><i class="fa fa-cogs"></i> Комплектующие</h4></div>
+            <div class="form-group">
+                <div id="archdata" style="overflow-x:scroll; height: 76.5vh;">
+                    <table class="table table-bordered table-condensed datatable">
+                        <tbody>
+                            <tr class="toptop">
+                                <th>
+                                </th>
+                                <th style="width: 40% !important;">Наименование</th>
+                                <th style="width: 30% !important;">Единица измерения</th>
+                                <th style="width: 30% !important;">Стоимость</th>
+                            </tr>
+                            @foreach (var row in Model)
+                            {
+                                if (!row.isDeleted)
+                                {
+                                    <tr id="@row.Id">
+                                        <td>
+                                            <div class="btn-group super-navi">
+                                                <button class="btn btn-primary dropdown-toggle btn-xs btn-radius" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-bars"></i>
+                                                </button>
+                                                <ul class="dropdown-menu devdata" value="@row.Id">
+                                                    <li>
+                                                        <button data-id-device="@row.Id" value="Accessories/Update" title="Редактировать комплектующее" class="">
+                                                            <i class="fa fa-pencil"></i> Редактировать
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button data-id-device="@row.Id" value="Accessories/Delete" title="Удалить комплектующее" class="">
+                                                            <i class="fa fa-times"></i> Удалить
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td>@row.Name</td>
+                                        <td>@row.MeasureUnit</td>
+                                        <td>@row.Value</td>
+
+                                    </tr>
+                                }
+                                else if (Convert.ToBoolean(Session["ShowDeleted"]))
+                                {
+                                    <tr id="@row.Id" style="background-color: lightcoral">
+                                        <td>
+                                            <div class="btn-group super-navi">
+                                                <button class="btn btn-primary dropdown-toggle btn-xs btn-radius" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-bars"></i>
+                                                </button>
+                                                <ul class="dropdown-menu devdata" value="@row.Id">
+                                                    <li>
+                                                        <button data-id-device="@row.Id" value="Accessories/Restore" title="Восстановить комплектующее" class="">
+                                                            <i class="fa fa-refresh"></i> Восстановить
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td>@row.Name</td>
+                                        <td>@row.MeasureUnit</td>
+                                        <td>@row.Value</td>
+
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        const newspaperSpinning = [
+            { backgroundColor: "antiquewhite" },    
+        ];
+        const newspaperTiming = {
+            duration: 1000,
+            iterations: 3,
+        };
+        if ('@Session["LastUpdatedOrCreatedAccessory"]' != null && '@Session["LastUpdatedOrCreatedAccessory"]' != "") {
+            var row = document.getElementById('@Session["LastUpdatedOrCreatedAccessory"]');
+            if (row != null) {
+                row.scrollIntoView({ block: "end", behavior: "smooth" });
+                row.animate(newspaperSpinning, newspaperTiming)
+            }
+        }
+    });
+    $("button[value='Accessories/Update']").on('click', function () {
+        var clientId = $(this).attr('data-id-device');
+        $.ajax({
+            type: 'get',
+            url: "../" + $(this).val() + "?id=" + clientId,
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+            }
+        });
+    });
+    $("button[value='Accessories/Restore']").on('click', function () {
+        var clientId = $(this).attr('data-id-device');
+        $.ajax({
+            type: 'get',
+            url: "../" + $(this).val() + "?id=" + clientId,
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+            }
+        });
+    });
+    $("button[value='Accessories/Delete']").on('click', function () {
+        var clientId = $(this).attr('data-id-device');
+        $.ajax({
+            type: 'get',
+            url: "../" + $(this).val() + "?id=" + clientId,
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+            }
+        });
+    });
+</script>

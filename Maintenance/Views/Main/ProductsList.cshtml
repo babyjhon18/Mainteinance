@@ -1,0 +1,69 @@
+﻿@model IEnumerable<Project.Models.Products>
+@{
+    ViewBag.Title = "Изделия";
+}
+<div role="navigation">
+
+    <div class="blog-masthead">
+        <nav class="navbar navbar-default navbar-fixed-top blog-nav" role="navigation">
+            <div class="container-fluid" id="navfluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#"><img src="@Url.Content("~/Content/tm/images/logo1.png")" alt="ЗАО ИнделКо. Системы телемеханики."></a>
+                </div>
+                <div class="collapse navbar-collapse" id="navigationbar">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a class="blog-nav-item" href="Index"><i class="fa fa-sign-out"></i>Выйти</a> </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    </div>
+</div>
+<div class="config-search col-md-12 col-xs-12">
+    <div class="shed">
+        <div class="well" style="height: 40px;">
+            <button value="Products/Create" title="Добавить клиента" class="btn btn-sm btn-primary col-xs-12 col-md-2"><i class="fa fa-plus"></i>Добавить</button>
+        </div>
+
+    </div>
+</div>
+<div class="vertical-center" style="height: auto;">
+    <div class="container no-center" style="line-height: 0;">
+        @foreach (var row in Model)
+        {
+            <div style="float: left">
+                <a class="btn btn-default" href="/Main/Materials?ProductId=@row.Id" style="width: auto;  margin-left: 15px; line-height: 0; float: left"><h3>@row.Name</h3></a><a class="btn btn-default" style="width: auto;  line-height: 0; float: left"><h3><i value="Products/Delete" id="@row.Id" style="color:#333" class="fa fa-trash"></i></h3></a><br>
+            </div>
+        }
+    </div>
+</div>
+<div class="modal" id="modal_dialog">
+
+</div>
+<script>
+    $("button[value='Products/Create']").on('click', function () {
+        $.ajax({
+            type: 'get',
+            url: "../" + $(this).val(),
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+            }
+        });
+    });
+    $("i[value='Products/Delete']").on('click', function () {
+
+        var productId = $(this).attr("id");
+        $.ajax({
+            type: 'get',
+            url: "../Products/Delete" + "?id=" + productId,
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+
+            }
+        });
+    });
+</script>

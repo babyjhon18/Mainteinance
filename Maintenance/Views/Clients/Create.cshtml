@@ -1,0 +1,177 @@
+﻿@{
+    Layout = null;
+}
+
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        @using (Html.BeginForm("Create", "Clients", FormMethod.Post, new { @class = "form-horizontal", @id = "CreateClientsForm", @role = "form" }))
+        {
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title"><i class="fa fa-plus"></i> Добавить клиента</h5>
+            </div>
+            <div class="modal-body">
+                <fieldset>
+                    <legend><i class="fa fa-pencil-square-o"></i> Клиент</legend>
+                    <div class="form-group">
+                        <label for="ClientName" class="col-lg-4 control-label">Наименование</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Наименование" id="ClientName" name="ClientName" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientAddress" class="col-lg-4 control-label">Адрес</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Адрес" id="ClientAddress" name="ClientAddress" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ClientCheckingAccount" class="col-lg-4 control-label">Расчетный счет</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Расчетный счет" id="ClientCheckingAccount" name="ClientCheckingAccount" pattern="BY[0-9A-Z]{26}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientBank" class="col-lg-4 control-label">Банк</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Банк" id="ClientBank" name="ClientBank" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientBankAddress" class="col-lg-4 control-label">Адрес банка</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Адрес банка" id="ClientBankAddress" name="ClientBankAddress" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientBIC" class="col-lg-4 control-label">BIC</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="BIC" id="ClientBIC" name="ClientBIC" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientUNP" class="col-lg-4 control-label">УНП</label>
+                        <div class="col-lg-8">
+                            <input type="number" min="99999999" max="999999999" class="form-control" placeholder="УНП" id="ClientUNP" name="ClientUNP" pattern="[0-9]{9}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientOKPO" class="col-lg-4 control-label">ОКПО</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="ОКПО" id="ClientOKPO" name="ClientOKPO" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ContractNumber" class="col-lg-4 control-label">Номер договора</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Номер последнего договора" id="ContractNumber" name="ContractNumber" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ContractDate" class="col-lg-4 control-label">Дата договора</label>
+                        <div class="col-lg-8">
+                            <input class="datepicker form-control" autocomplete="off" data-provide="datepicker" placeholder="Дата последнего договора" id="ContractDate" name="ContractDate" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="RPJobTitle" class="col-lg-4 control-label">В лице</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Пример: генерального директора" id="RPJobTitle" name="RPJobTitle" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientResponsiblePerson" class="col-lg-4 control-label">Ответственное лицо(И.П.)</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Ответственное лицо в именительном падеже" id="ClientResponsiblePerson" name="ClientResponsiblePerson" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="LongResponsiblePerson" class="col-lg-4 control-label">Ответственное лицо(Р.П.)</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Ответственное лицо в родительном падеже" id="LongResponsiblePerson" name="LongResponsiblePerson" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="BasedOnDescription" class="col-lg-4 control-label">Действующего на основании</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Пример: доверенности/Устава" id="BasedOnDescription" name="BasedOnDescription" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientContactNumber" class="col-lg-4 control-label">Контактный телефон</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Контактный телефон" id="ClientContactNumber" name="ClientContactNumber" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientEmail" class="col-lg-4 control-label">Email адрес</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Email адрес" id="ClientEmail" name="ClientEmail" />
+                        </div>
+                    </div>
+
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Отмена</button>
+                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Добавить</button>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".chosen-select").chosen({
+            width: "100%",
+            allow_single_deselect: true
+        });
+
+        $('#ClientContactNumber').mask("+375(99) 999-99-99");
+        $('#ClientUNP').mask("999999999");
+        //$('#ClientCheckingAccount').mask("BY");
+      $("#IsActive")
+        .on("change",
+          function() {
+            if ($(this).is(":checked")) {
+              $(this).val("true");
+            } else {
+              $(this).val("false");
+            }
+          });
+        //$('#ClientName').on('input', function () {
+        //    $(this).val($(this).val().replace(/"/g, ''));
+        //});
+        $('.datepicker').datepicker({
+            todayBtn: "linked",
+            language: "ru-RU",
+            format: "dd.mm.yyyy",
+            autoclose: true
+        });
+        $('.datepicker').change(function () {
+            var date = $(this).datepicker('getDate');
+            var day = date.getDate();
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            switch (date.getMonth()) {
+                case "0":
+                case "1":
+                case "2":
+                case "3":
+                case "4":
+                case "5":
+                case "6":
+                case "7":
+                case "8":
+                    $(this).val(day + ".0" + month + "." + year);
+                    break;
+                case "9":
+                case "10":
+                case "11":
+                    $(this).val(day + "." + month + "." + year);
+            }
+        });
+    });
+</script>

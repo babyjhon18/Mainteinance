@@ -1,0 +1,63 @@
+﻿@model Project.Models.Jobs
+@{
+    Layout = null;
+}
+<div class="modal-dialog">
+    <div class="modal-content">
+        @using (Html.BeginForm("Update", "Jobs", FormMethod.Post, new { @class = "form-horizontal", @id = "UpdateJobsForm", @role = "form" }))
+        {
+            @Html.HiddenFor(model => model.Id)
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title"><i class="fa fa-plus"></i> Редактировать работу</h5>
+            </div>
+            <div class="modal-body">
+                <fieldset>
+                    <legend><i class="fa fa-pencil-square-o"></i> Работа</legend>
+                    <div class="form-group">
+                        <label for="JobName" class="col-lg-4 control-label">Наименование</label>
+                        <div class="col-lg-8">
+                           @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @required = true, @class = "form-control", @placeholder = "Наименование" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="JobTime" class="col-lg-4 control-label">Норма времени</label>
+                        <div class="col-lg-8">
+                            @Html.EditorFor(model => model.NormsOfTime, new { htmlAttributes = new { @required = true, @class = "form-control", @placeholder = "Норма времени" } })
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Отмена</button>
+                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Сохранить изменения</button>
+
+            </div>
+        }
+    </div>
+</div>
+<style>
+    .col-lg-8 {
+        color: black;
+        font-size: 12px;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $(".chosen-select").chosen({
+            width: "100%",
+            allow_single_deselect: true
+        });
+        $('#ContactNumber').mask("+375(99) 999-99-99");
+      $("#IsActive")
+        .on("change",
+          function() {
+            if ($(this).is(":checked")) {
+              $(this).val("true");
+            } else {
+              $(this).val("false");
+            }
+          });
+
+    });
+</script>

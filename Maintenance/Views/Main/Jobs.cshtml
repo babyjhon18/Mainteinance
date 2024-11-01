@@ -1,0 +1,102 @@
+﻿@model IEnumerable<Project.Models.Jobs>
+@{
+    ViewBag.Title = "Работы";
+}
+
+
+<div class="blog-masthead">
+    <nav class="navbar navbar-default navbar-fixed-top blog-nav" role="navigation">
+        <div class="container-fluid" id="navfluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"><img src="/Content/tm/images/logo1.png" alt="ЗАО ИнделКо. Системы телемеханики."></a>
+            </div>
+            <div class="collapse navbar-collapse" id="navigationbar">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a class="blog-nav-item" href="Index"> <i class="fa fa-sign-out"></i>Выйти</a> </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+</div>
+<div class="config-search col-md-12 col-xs-12">
+    <div class="shed">
+        <div class="well" style="height: 40px;">
+            <button value="Jobs/Create" title="Добавить работы" class="btn btn-sm btn-primary col-xs-12 col-md-2" style="max-width: 175px;"><i class="fa fa-plus"></i>Добавить</button>
+
+            <div class="input-group hidden-xs" style="max-width: 700px; float:left">
+                <span class="input-group-btn">
+                    <input id="myInputSearch" type="search" class="form-control" style="border-right: 1px solid #428bca !important; width: 500px;" aria-label="..." placeholder="Введите запрос для поиска работ по наименованию..." >
+
+                </span>
+                
+            </div><!-- /input-group -->
+            <button value="Jobs/Search" title="Найти" class="btn btn-sm btn-primary col-xs-12 col-md-2" style="margin-left: -185px;"><i class="fa fa-plus"></i> Найти</button>
+        </div>
+
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row full-height">
+    <div class="col-sm-12 col-md-12 reports">
+
+        <div class="row placeholders main-content">
+
+            <div id="reportData" class="panel-body" style="margin-top: 0;">
+                @Html.Partial("_ViewJobs", Model)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="modal_dialog">
+
+</div>
+<script>
+    $(document).ready(function () {
+        $("#main-container").css("overflow", "hidden");
+    });
+    $("button[value='Jobs/Create']").on('click', function () {
+        $.ajax({
+            type: 'get',
+            url: "../" + $(this).val(),
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+            }
+        });
+    });
+    $("button[value='Jobs/Update']").on('click', function () {
+        var clientId = $(this).attr('data-id-device');
+        $.ajax({
+            type: 'get',
+            url: "../" + $(this).val() + "?id=" + clientId,
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+            }
+        });
+    });
+    $("button[value='Jobs/Delete']").on('click', function () {
+        var clientId = $(this).attr('data-id-device');
+        $.ajax({
+            type: 'get',
+            url: "../" + $(this).val() + "?id=" + clientId,
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+            }
+        });
+    });
+    $("button[value='Jobs/Search']").on('click', function () {
+        var key = $("#myInputSearch").val();
+        var condition = $("#mySelectBox").val();
+        $.ajax({
+            type: 'get',
+            url: "../Main/_ViewJobs?key="+key,
+            success: function (data) {
+                $("#reportData").html(data);
+            }
+        });
+    });
+</script>

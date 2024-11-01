@@ -1,0 +1,143 @@
+﻿@model Project.Models.ContractClass
+@{
+    Layout = null;
+    DateTime ExpDate = new DateTime(DateTime.Today.Year, 12, 31);
+}
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        @using (Html.BeginForm("Contract", "Clients", FormMethod.Post, new { @class = "form-horizontal", @id = "CreateClientsForm", @role = "form" }))
+        {
+            @Html.HiddenFor(model => model.Clients.Id)
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title"><i class="fa fa-plus"></i> Сформировать договор</h5>
+            </div>
+            <div class="modal-body">
+                <fieldset>
+                    <legend><i class="fa fa-pencil-square-o"></i> Договор</legend>
+                    <div class="form-group">
+                        <label for="ContractNumber" class="col-lg-4 control-label">Номер договора</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Номер договора" id="ContractNumber" name="ContractNumber" required />*@@Html.EditorFor(model => model.Clients.ContractNumber, new { htmlAttributes = new { @name = "ContractNumber", @class = "form-control", @placeholder = "Номер договора", required = "required" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ContractDate" class="col-lg-4 control-label">Дата договора</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Дата договора" id="ContractDate" name="ContractDate" required />*@@Html.EditorFor(model => model.Clients.ContractDate, new { htmlAttributes = new { @name = "ContractDate", @class = "datepicker", @placeholder = "Дата договора", @style = "height: 25px;width: 100%;margin-bottom: 5px;", @autocomplete = "off", required = "required" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ContractExpDate" class="col-lg-4 control-label">Дата истечения договора</label>
+                        <div class="col-lg-8">
+                            <input name="ContractExpDate" class="datepicker" value="@ExpDate.ToString("dd.MM.yyyy")" style="height: 25px; width: 100%; margin-bottom: 5px;"/> 
+                            @*<input type="text" class="form-control" placeholder="Дата договора" id="ContractDate" name="ContractDate" required />*@
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend><i class="fa fa-pencil-square-o"></i> Клиент</legend>
+                    <div class="form-group">
+                        <label for="ResponsiblePersonShort" class="col-lg-4 control-label">Ответственное лицо(И.П.)</label>
+                        
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Ответственное лицо в именительном падеже" id="ResponsiblePersonShort" name="ResponsiblePersonShort" required />*@@Html.EditorFor(model => model.Clients.ResponsiblePerson, new { htmlAttributes = new { @name = "ResponsiblePerson", @class = "form-control", @placeholder = "Ответственное лицо в именительном падеже" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="LongResponsiblePerson" class="col-lg-4 control-label">Ответственное лицо(Р.П.)</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Ответственное лицо в родительном падеже" id="LongResponsiblePerson" name="LongResponsiblePerson" required />*@@Html.EditorFor(model => model.Clients.LongResponsiblePerson, new { htmlAttributes = new { @name = "LongResponsiblePerson", @class = "form-control", @placeholder = "Ответственное лицо в родительном падеже" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="RPJobTitle" class="col-lg-4 control-label">В лице</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Пример: генерального директора" id="RPJobTitle" name="RPJobTitle" required />*@@Html.EditorFor(model => model.Clients.RPJobTitle, new { htmlAttributes = new { @name = "RPJobTitle", @class = "form-control", @placeholder = "Пример: генерального директора" } })
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend><i class="fa fa-pencil-square-o"></i> Наша сторона</legend>
+                    <div class="form-group">
+                        <label for="PersonShort" class="col-lg-4 control-label">Ответственное лицо(И.П.)</label>
+                        <div class="col-lg-8" style="margin-bottom: 5px; float: right;">
+                            <select data-placeholder="Ответственное лицо в именительном падеже" id="PersonShort" name="PersonShort" style="width:100% !important">
+                                @foreach (var i in Model.Person)
+                                {
+                                    <option id="@i.id" LongName="@i.name" contractBase="@i.Base" jobTitle="@i.JobTitle" value="@i.id">@i.shortName</option>
+                                }
+                            </select>
+                        </div>
+                        <!--<div class="col-lg-8">-->
+                        @*<input type="text" class="form-control" placeholder="Ответственное лицо в именительном падеже" id="PersonShort" name="PersonShort" required />@Html.EditorFor(model => model.ContractNumber, new { htmlAttributes = new { @class = "form-control", @placeholder = "Номер договора" } })*@
+                        <!--</div>-->
+                    </div>
+                    <div class="form-group">
+                        <label for="LongPerson" class="col-lg-4 control-label">Ответственное лицо(Р.П.)</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Ответственное лицо в родительном падеже" id="LongPerson" name="LongPerson" required />
+                        </div>
+                        <div class="col-lg-8">
+                            <input type="text" style="display: none" id="ResponsiblePersonId" name="ResponsiblePersonId" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="JobTitle" class="col-lg-4 control-label">В лице</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Пример: генерального директора" id="JobTitle" name="JobTitle" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ContractBase" class="col-lg-4 control-label">На основании</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Пример: Устава " id="ContractBase" name="ContractBase" required />
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Отмена</button>
+                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-download"></i> Ок</button>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    $('#PersonShort').on('change', function () {
+        $('#LongPerson').val(this.options[this.selectedIndex].getAttribute('LongName'));
+        $('#JobTitle').val(this.options[this.selectedIndex].getAttribute('jobTitle'));
+        $('#ContractBase').val(this.options[this.selectedIndex].getAttribute('contractBase'))
+        $('#ResponsiblePersonId').val(this.options[this.selectedIndex].getAttribute('value'));
+    }).trigger('change');
+    $('.datepicker').datepicker({
+        todayBtn: "linked",
+        language: "ru-RU",
+        format: "dd.mm.yyyy",
+        autoclose: true
+    });
+    $('.datepicker').change(function () {
+        var date = $(this).datepicker('getDate');
+        var day = date.getDate();
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        switch (date.getMonth()) {
+            case "0":
+            case "1":
+            case "2":
+            case "3":
+            case "4":
+            case "5":
+            case "6":
+            case "7":
+            case "8":
+                $(this).val(day + ".0" + month + "." + year);
+                break;
+            case "9":
+            case "10":
+            case "11":
+                $(this).val(day + "." + month + "." + year);
+        }
+    });
+</script>

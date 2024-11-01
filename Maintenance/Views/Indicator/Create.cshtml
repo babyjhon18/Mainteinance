@@ -1,0 +1,47 @@
+﻿@{
+    Layout = null;
+}
+
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        @using (Html.BeginForm("Create", "Indicator", FormMethod.Post, new { @class = "form-horizontal", @id = "CreateIndicatorsForm", @role = "form" }))
+        {
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title"><i class="fa fa-plus"></i> Новый ремонтник</h5>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="FullName" class="col-lg-4 control-label">ФИО</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="ФИО" id="FullName" name="FullName" required />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sellaryPerMonth" class="col-lg-4 control-label">Должностной оклад</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="Должностной оклад" id="sellaryPerMonth" name="sellaryPerMonth" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="avgWorkTime" class="col-lg-4 control-label">Средняя норма рабочего времени</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="Средняя норма рабочего времени" id="avgWorkTime" name="avgWorkTime" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="hourPrice" class="col-lg-4 control-label">Стоимость 1 часа</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="Стоимость 1 часа" id="hourPrice" name="hourPrice" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Отмена</button>
+                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Добавить</button>
+            </div>
+        }
+    </div>
+</div>

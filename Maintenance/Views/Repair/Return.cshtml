@@ -1,0 +1,77 @@
+﻿@model Project.Models.RepairClass
+@{
+    Layout = null;
+}
+
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        @using (Html.BeginForm("Return", "Repair", FormMethod.Post, new { @class = "form-horizontal", @id = "ReturnRepairForm", @role = "form" }))
+        {
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title"><i class="fa fa-plus"></i> Возврат заказа</h5>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" value="@Model.Repairs.Id" id="Id" name="Id" />
+                <div id="DateToClientBlock" class="form-group" >
+                    <label for="DateToClient" class="col-lg-4 control-label">Дата возврата заказчику</label>
+                    <div class="col-lg-8">
+                        <input class="datepicker" data-provide="datepicker" style="height: 25px;width: 100%;margin-bottom: 5px;" autocomplete="off" placeholder="Дата возврата заказчику" id="DateToClient" name="DateToClient" />
+                    </div>
+                </div>
+                <div id="NoteBlock" class="form-group">
+                    <label for="Note" class="col-lg-4 control-label">Примечания</label>
+                    <div class="col-lg-8">
+                        @*<input type="text" class="form-control" placeholder="Примечания" id="Note" name="Note" />*@
+                        @Html.EditorFor(model => Model.Repairs.Note, new { htmlAttributes = new { @class = "form-control", @placeholder = "Примечание" } })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Отмена</button>
+                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Сохранить</button>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".chosen-select").chosen({
+            width: "100%",
+            allow_single_deselect: true
+        });
+        $('.datepicker').datepicker({
+            todayBtn: "linked",
+            language: "ru-RU",
+            format: "dd-mm-yyyy",
+            autoclose: true
+        });
+
+        $('.datepicker').change(function () {
+            var date = $(this).datepicker('getDate');
+            var day = date.getDate();
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            switch (date.getMonth()) {
+                case "0":
+                case "1":
+                case "2":
+                case "3":
+                case "4":
+                case "5":
+                case "6":
+                case "7":
+                case "8":
+                    $(this).val(day + ".0" + month + "." + year);
+                    break;
+                case "9":
+                case "10":
+                case "11":
+                    $(this).val(day + "." + month + "." + year);
+            }
+
+        });
+    });
+</script>

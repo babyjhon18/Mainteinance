@@ -1,0 +1,230 @@
+﻿@model Project.Models.RepairClass
+@{
+    Layout = null;
+}
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        @using (Html.BeginForm("Edit", "Repair", FormMethod.Post, new { @class = "form-horizontal", @id = "EditRepairForm", @role = "form" }))
+        {
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title"><i class="fa fa-plus"></i>  Изменить</h5>
+            </div>
+            <div class="modal-body">    
+                <div id="data-table" style="display: block">
+                    <input type="hidden" value="@Model.Repairs.Id" id="Id" name="Id" />
+                    <div class="form-group">
+                        <label for="ClientName" class="col-lg-4 control-label">Заказчик</label>
+                        <div class="col-lg-8">
+                            @*@Html.DropDownList("Client", new SelectList(Model.Clients, "name", "name", Model.Repairs.ClientId), new { htmlAttributes = new { @class = "form-control", @placeholder = "Заказчик" } })*@
+                            <select class="form-control chosen-select" placeholder="Заказчик" id="Client" name="Client">
+                                @foreach (var i in Model.Clients)
+                                {
+                                    if (i.Id == Model.Repairs.ClientId)
+                                    {
+                                        <option id="@i.Id" value="@i.Name" selected>@i.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option id="@i.Id" value="@i.Name">@i.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ContactPerson" class="col-lg-4 control-label">Контактное лицо</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Контактное лицо" id="ContactPerson" name="ContactPerson" />*@
+                            @Html.EditorFor(model => model.Repairs.ContactPerson, new { htmlAttributes = new { @name = "ContactPerson", @class = "form-control", @placeholder = "Контактное лицо" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Product" class="col-lg-4 control-label">Изделие</label>
+                        <div class="col-lg-8">
+                            @*@Html.DropDownList("Product", new SelectList(Model.Products, "name", "name", Model.Repairs.ProductId), new { htmlAttributes = new { @class = "form-control", @placeholder = "Изделие" } })*@
+                            <select class="form-control chosen-select" placeholder="Изделие" id="Product" name="Product">
+                                @foreach (var i in Model.Products)
+                                {
+                                    if (i.Id == Model.Repairs.ProductId)
+                                    {
+                                        <option id="@i.Id" value="@i.Name" selected>@i.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option id="@i.Id" value="@i.Name">@i.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="FactoryNumber" class="col-lg-4 control-label">Заводской номер</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Заводской номер" id="FactoryNumber" name="FactoryNumber" />*@
+                            @Html.EditorFor(model => model.Repairs.FactoryNumber, new { htmlAttributes = new { @name = "FactoryNumber", @class = "form-control", @placeholder = "Заводской номер" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="RTUNumber" class="col-lg-4 control-label">Номер RTU</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Номер RTU" id="RTUNumber" name="RTUNumber" />*@
+                            @Html.EditorFor(model => model.Repairs.RTUNumber, new { htmlAttributes = new { @name = "RTUNumber", @class = "form-control", @placeholder = "Номер RTU" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="DateToRepair" class="col-lg-4 control-label">Дата сдачи в ремонт</label>
+                        <div class="col-lg-8">
+                            @*<input class="datepicker" autocomplete="off" style="height: 25px;width: 100%;margin-bottom: 5px;" data-provide="datepicker" placeholder="Дата сдачи в ремонт" id="DateToRepair" name="DateToRepair" />*@
+                            @Html.EditorFor(model => model.Repairs.DateToRepair, new { htmlAttributes = new { @name = "DateToRepair", @class = "datepicker", @placeholder = "Дата сдачи в ремонт", @style = "height: 25px;width: 100%;margin-bottom: 5px;", @autocomplete = "off" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Defect" class="col-lg-4 control-label">Неисправность</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Неисправность" id="Defect" name="Defect" />*@
+                            @Html.EditorFor(model => model.Repairs.Defect, new { htmlAttributes = new { @name = "Defect", @class = "form-control", @placeholder = "Неисправность" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Set" class="col-lg-4 control-label">Комплектность</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Комплектность" id="Set" name="Set" />*@
+                            @* @Html.EditorFor(model => model.Repairs.Set, new { htmlAttributes = new { @name = "Set", @class = "form-control", @placeholder = "Комплектность" } })*@
+                            <div class="col-lg-5">
+                                <input type="hidden" class="form-control" placeholder="Комплектность" id="Set" name="Set" />
+                                <input type="radio" id="1" name="1" value="В корпусе" />В корпусе<br />
+                                <input type="radio" id="2" name="1" value="Плата" />Плата<br />
+                                <input type="checkbox" name="3" />Антенна<br />
+                                <input type="checkbox" name="4" />Кабель питания<br />
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="row">
+                                    <label for="Defect" class="col-lg-8 control-label" style="margin-top: 3px; margin-right: 4px; width: 120px; text-align: left;">Кабельные вводы</label>
+                                    <input type="number" class="form-control" name="5" style="width: 40px;" min="0" max="4" value="0" />
+                                </div>
+                                <div class="row">
+                                    <label for="Defect" class="col-lg-8 control-label" style="margin-top: 3px; margin-right: 4px; width: 120px;text-align: left;">Заглушки кабельных вводов</label>
+                                    <input type="number" class="form-control" name="6" style="width: 40px;" min="0" max="4" value="0" />
+                                </div>
+                                <input type="checkbox" name="7" style="margin-right: 10px; margin-left: -15px;" />Блок питания<br />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Note" class="col-lg-4 control-label">Примечание</label>
+                    <div class="col-lg-8">
+                        @*<input type="text" class="form-control" placeholder="Неисправность" id="Defect" name="Defect" />*@
+                        @Html.EditorFor(model => model.Repairs.Note, new { htmlAttributes = new { @name = "Note", @class = "form-control", @placeholder = "Примечание" } })
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Отмена</button>
+                <button type="submit" id="submit" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Сохранить</button>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        console.log("@Model.Repairs.Set");
+        if("@Model.Repairs.Set.Contains("В корпусе")" == "True") {
+            $('input[name="1"]#1').prop('checked', true);
+        }
+        if("@Model.Repairs.Set.Contains("Плата")" == "True") {
+            $('input[name="1"]#2').prop('checked', true);
+        }
+        if("@Model.Repairs.Set.Contains("Антенна")" == "True") {
+            $('input[name="3"]').prop('checked', true);
+        }
+        if("@Model.Repairs.Set.Contains("Кабель питания")" == "True") {
+            $('input[name="4"]').prop('checked', true);
+        }
+        if("@Model.Repairs.Set.Contains("Заглушки кабельных вводов: 1")" == "True") {
+            $('input[name="6"]').val(1);
+        }
+        if("@Model.Repairs.Set.Contains("Заглушки кабельных вводов: 2")" == "True") {
+            $('input[name="6"]').val(2);
+        }
+        if("@Model.Repairs.Set.Contains("Заглушки кабельных вводов: 3")" == "True") {
+            $('input[name="6"]').val(3);
+        }
+        if("@Model.Repairs.Set.Contains("Заглушки кабельных вводов: 4")" == "True") {
+            $('input[name="6"]').val(4);
+        }
+        if("@Model.Repairs.Set.Contains("Кабельные вводы: 1")" == "True") {
+            $('input[name="5"]').val(1);
+        }
+        if("@Model.Repairs.Set.Contains("Кабельные вводы: 2")" == "True") {
+            $('input[name="5"]').val(2);
+        }
+        if("@Model.Repairs.Set.Contains("Кабельные вводы: 3")" == "True") {
+            $('input[name="5"]').val(3);
+        }
+        if("@Model.Repairs.Set.Contains("Кабельные вводы: 4")" == "True") {
+            $('input[name="5"]').val(4);
+        }
+        if("@Model.Repairs.Set.Contains("Блок питания")" == "True") {
+            $('input[name="7"]').prop('checked', true);
+        }
+        $('#submit').on('click', function () {
+            var set = "";
+            if($('input[name="1"]').is(':checked')) {
+                set += $('input[name="1"]:checked').val() + "; ";
+            }
+            if($('input[name="3"]').is(':checked')) {
+                set += "Антенна" + "; ";
+            }
+            if($('input[name="4"]').is(':checked')) {
+                set += "Кабель питания" + "; ";
+            }
+            set +="Кабельные вводы: " + $('input[name="5"]').val() + "; ";
+            set +="Заглушки кабельных вводов: " + $('input[name="6"]').val() + "; ";
+
+            if($('input[name="7"]').is(':checked')) {
+                set += "Блок питания" + "; ";
+            }
+            console.log(set);
+            $('#Set').val(set);
+        });
+        $(".chosen-select").chosen({
+            width: "100%",
+            allow_single_deselect: true
+        });
+        $('.datepicker').datepicker({
+            todayBtn: "linked",
+            language: "ru-RU",
+            format: "dd-mm-yyyy",
+            autoclose: true
+        });
+
+        $('.datepicker').change(function () {
+            var date = $(this).datepicker('getDate');
+            var day = date.getDate();
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            switch (date.getMonth()) {
+                case "0":
+                case "1":
+                case "2":
+                case "3":
+                case "4":
+                case "5":
+                case "6":
+                case "7":
+                case "8":
+                    $(this).val(day + ".0" + month + "." + year);
+                    break;
+                case "9":
+                case "10":
+                case "11":
+                    $(this).val(day + "." + month + "." + year);
+            }
+
+        });
+    });
+</script>

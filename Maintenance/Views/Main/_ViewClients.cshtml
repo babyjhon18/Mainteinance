@@ -1,0 +1,119 @@
+﻿@model IEnumerable<Project.Models.Clients>
+
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h4 class="report_header"><i class="fa fa-users"></i> Клиенты</h4></div>
+            <div class="form-group">
+                <div id="archdata" style="overflow-x:scroll; height: 76vh;">
+                    <table class="table table-bordered table-condensed datatable">
+                        <tbody>
+                            <tr class="toptop">
+                                <th>
+
+                                </th>
+                                <th style="width:10% !important">Наименование</th>
+                                <th style="width:10% !important">Номер договора</th>
+                                <th style="width:10% !important">Дата последнего договора</th>
+                                <th style="width:10% !important">Адрес</th>
+                                <th style="width:10% !important">Рачетный счет</th>
+                                <th style="width:10% !important">Банк</th>
+                                <th style="width:10% !important">Адрес банка</th>
+                                <th style="width:10% !important">BIC</th>
+                                <th style="width:10% !important">УНП</th>
+                                <th style="width:10% !important">ОКПО</th>
+                                <th style="width:10% !important">В лице</th>
+                                <th style="width:10% !important">Ответственное лицо</th>
+                                <th style="width:10% !important">Контактный телефон</th>
+                                <th style="width:10% !important">Email адрес</th>
+                            </tr>
+                            @foreach (var row in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="btn-group super-navi">
+                                            <button class="btn btn-primary dropdown-toggle btn-xs btn-radius" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fa fa-bars"></i>
+                                            </button>
+                                            <ul class="dropdown-menu devdata" value="@row.Id">
+                                                <li>
+                                                    <button data-id-device="@row.Id" value="Clients/Update" title="Редактировать данные клиента" class="">
+                                                        <i class="fa fa-pencil"></i> Редактировать
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button data-id-device="@row.Id" value="Clients/Contract" title="Договор" class="">
+                                                        <i class="fa fa-file"></i> Договор
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button data-id-device="@row.Id" value="Clients/Delete" title="Удалить клиента" class="">
+                                                        <i class="fa fa-times"></i> Удалить
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td>@row.Name</td>
+                                    <td>@row.ContractNumber</td>
+                                    <td>@row.ContractDate</td>
+                                    <td>@row.Address</td>
+                                    <td>@row.CheckingAccount</td>
+                                    <td>@row.Bank</td>
+                                    <td>@row.BankAddress</td>
+                                    <td>@row.BIC</td>
+                                    <td>@row.UNP</td>
+                                    <td>@row.OKPO</td>
+                                    <td>@row.RPJobTitle</td>
+                                    <td>@row.ResponsiblePerson</td>
+                                    <td>@row.ContactNumber</td>
+                                    <td>@row.Email</td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("button[value='Clients/Delete']").on('click', function () {
+        var clientId = $(this).attr('data-id-device');
+        $.ajax({
+            type: 'get',
+            url: "../" + $(this).val() + "?id=" + clientId,
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+            }
+        });
+    });
+    $("button[value='Clients/Contract']").on('click', function () {
+        var clientId = $(this).attr('data-id-device');
+        $.ajax({
+            type: 'get',
+            url: "../" + $(this).val() + "?id=" + clientId,
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+            }
+        });
+    });
+    $("button[value='Clients/Update']").on('click', function () {
+        var clientId = $(this).attr('data-id-device');
+        $.ajax({
+            type: 'get',
+            url: "../" + $(this).val() + "?id=" + clientId,
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+            }
+        });
+    });
+</script>

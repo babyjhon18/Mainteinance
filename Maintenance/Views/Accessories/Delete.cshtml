@@ -1,0 +1,57 @@
+﻿@model Project.Models.Accessories
+@{
+    Layout = null;
+}
+<div class="modal-dialog">
+    <div class="modal-content">
+        @using (Html.BeginForm("Delete", "Accessories", FormMethod.Post, new { @class = "form-horizontal", @id = "DeleteAccessoriesForm", @role = "form" }))
+        {
+            @Html.HiddenFor(model => model.Id)
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title"><i class="fa fa-trash"></i> Удалить комплектующее</h5>
+            </div>
+            if (Model.Id != -1)
+            {
+                <div style="text-align: center;margin: 30px;">
+                    <h3>Вы действительно хотите удалить?</h3>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Отмена</button>
+                    <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-trash"></i> Удалить</button>
+                </div>
+            }
+            else
+            {
+                <div style="text-align: center;margin: 30px;">
+                    <h3>Комплектующее невозможно удалить, так как оно привязано к ремонтам!</h3>
+                </div>
+            }
+        }
+    </div>
+</div>
+<style>
+    .col-lg-8 {
+        color: black;
+        font-size: 12px;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $(".chosen-select").chosen({
+            width: "100%",
+            allow_single_deselect: true
+        });
+        $('#ContactNumber').mask("+375(99) 999-99-99");
+      $("#IsActive")
+        .on("change",
+          function() {
+            if ($(this).is(":checked")) {
+              $(this).val("true");
+            } else {
+              $(this).val("false");
+            }
+          });
+
+    });
+</script>

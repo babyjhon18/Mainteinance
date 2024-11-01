@@ -1,0 +1,164 @@
+﻿@model Project.Models.RepairClass
+@{
+    Layout = null;
+}
+
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        @using (Html.BeginForm("Update", "Repair", FormMethod.Post, new { @class = "form-horizontal", @id = "UpdateRepairForm", @role = "form" }))
+        {
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title"><i class="fa fa-plus"></i> Выполненные работы</h5>
+            </div>
+            <div class="modal-body">
+                <div id="JobsBlock" class="form-group">
+                    <input type="hidden" value="@ViewBag.ID" id="Id" name="Id" />
+                    <label class="col-lg-4 control-label">Выполненные работы</label>
+                    <i id="addJob" style="margin-left:10px; cursor: pointer" class="fa fa-plus"></i>
+                    <div class="col-lg-8" style="margin-bottom: 5px; float: right;">
+                        <select data-placeholder="Выполненные работы" id="Jobs" name="Jobs" style="width: 92% !important">
+                            @foreach (var i in Model.Jobs)
+                            {
+                                <option id="@i.Id" value="@i.Id">@i.Name</option>
+                            }
+                        </select>
+                        <i class="deleteJob fa fa-trash" style="margin-top: 3px; float:right; cursor: pointer"></i>
+                    </div>
+                </div>
+                <div id="MaterialsBlock" class="form-group">
+                    <input type="hidden" value="@ViewBag.ID" id="Id" name="Id" />
+                    <label class="col-lg-4 control-label">Использованные материалы</label>
+                    <i id="addMat" style="margin-left:10px; cursor: pointer" class="fa fa-plus"></i>
+                    <div class="col-lg-8" style="margin-bottom: 5px; float: right;">
+                        <select data-placeholder="Использованные материалы" id="Materials" name="Materials" style="width: 92% !important">
+                            @foreach (var i in Model.Materials.Where(m =>
+                                    m.ProductId == Convert.ToInt32(ViewBag.ProductID)))
+                            {
+                                try
+                                {
+                                    var accessory = Model.Accessories.Where(a => a.Id == i.AccessoryId).FirstOrDefault();
+                                    if (accessory != null)
+                                    {
+                                        <option id="@accessory.Id" value="@accessory.Id">@accessory.Name</option>
+                                    }
+                                }
+                                finally
+                                {
+                                }
+                            }
+                        </select>
+                        <i class="deleteMat fa fa-trash" style="margin-top: 3px; float:right; cursor: pointer"></i>
+                    </div>
+                </div>
+                <div id="RepairerBlock" class="form-group">
+                    <label class="col-lg-4 control-label">Ремотник</label>
+                    <div class="col-lg-8" style="margin-bottom: 5px; float: right;">
+                        <select data-placeholder="Ремотник" id="Repairer" name="Repairer" style="width:92% !important">
+                            @foreach (var i in Model.ResponsiblePersonsProperties)
+                            {
+                                if (@i.id == Convert.ToInt32(ViewBag.RepairerId))
+                                {
+                                    <option id="@i.id" value="@i.id" selected>@i.FullName</option>
+                                }
+                                else
+                                {
+                                    <option id="@i.id" value="@i.id">@i.FullName</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div id="DeviceBlock" class="form-group">
+                    <label for="Devices" class="col-lg-6 control-label">Приборы учета тепловой энергии</label>
+                    <div class="col-lg-6">
+                        <input type="text" class="form-control" placeholder="Приборы учета тепловой энергии" id="Devices" name="Devices" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-6 control-label">Прибор отремонтирован</label>
+                    <div class="col-lg-6" style="margin-bottom: 5px; float: right;">
+                        <input type="checkbox" name="RepairIsReady" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Отмена</button>
+                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Добавить</button>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+       var count = 1;
+       $("#addJob").on('click', function () {
+                count++
+                $("#JobsBlock").append('<div class="col-lg-8" style="margin-bottom: 5px;  float: right">'+
+                        '<select class="chosen-select" data-placeholder="Выполненные работы" id="Jobs" name="Jobs" style="width:92% !important">'+
+                    '@foreach (var i in Model.Jobs){<option id="@i.Id" value="@i.Id">@i.Name</option>}'+
+                        '</select><i class="deleteJob fa fa-trash" style="margin-top: 3px; float:right; cursor: pointer"></i>'+
+                    '</div>');
+        });
+         $("#addMat").on('click', function () {
+                count++
+                $("#MaterialsBlock").append('<div class="col-lg-8" style="margin-bottom: 5px;  float: right">'+
+                    '<select class="chosen-select" data-placeholder="Использованные материалы" id="Materials" name="Materials" style="width:92% !important">' +
+                    '@foreach (var i in Model.Materials.Where(
+                             m => m.ProductId == Convert.ToInt32(ViewBag.ProductID)))
+                    {
+                        var accessory = Model.Accessories.Where(a => a.Id == i.AccessoryId).FirstOrDefault();
+                        if (accessory != null) {
+                        <option id="@accessory.Id" value="@accessory.Id">@accessory.Name</option>}} ' +
+                        '</select><i class="deleteMat fa fa-trash" style="margin-top: 3px; float:right; cursor: pointer"></i>' +
+                        '</div>');
+                    });
+         $(document).on('click',".deleteJob", function () {
+            $(this).parent().remove();
+        });
+         $(document).on('click', ".deleteMat", function () {
+            $(this).parent().remove();
+        });
+        $(".chosen-select").chosen({
+            width: "100%",
+            allow_single_deselect: true
+        });
+        $('li.search-choice').on('click', function(){
+            console.log('c');
+        });
+     
+        $('.datepicker').datepicker({
+            todayBtn: "linked",
+            language: "ru-RU",
+            format: "dd-mm-yyyy",
+            autoclose: true
+        });
+
+        $('.datepicker').change(function () {
+            var date = $(this).datepicker('getDate');
+            var day = date.getDate();
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            switch (date.getMonth()) {
+                case "0":
+                case "1":
+                case "2":
+                case "3":
+                case "4":
+                case "5":
+                case "6":
+                case "7":
+                case "8":
+                    $(this).val(day + ".0" + month + "." + year);
+                    break;
+                case "9":
+                case "10":
+                case "11":
+                    $(this).val(day + "." + month + "." + year);
+            }
+
+        });
+    });
+</script>

@@ -1,0 +1,366 @@
+﻿@model IEnumerable<Project.Models.Repairs>
+@{
+    ViewBag.Title = "Журнал учёта ремонтов";
+}
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+</head>
+<script type="text/javascript">
+    var searchType;
+    function ifSelected(val) {
+        if (val === "0") {
+            $("#myInputSearch").attr("disabled", "disabled");
+        }
+        else {
+            $("#myInputSearch").removeAttr("disabled");
+        }
+        searchType = val;
+    }
+    function ifWritten(val) {
+        if (val === "") {
+            $("button[value='Repair/Search']").attr("disabled", "disabled");
+        }
+        else {
+            $("#myInputSearch").removeAttr('disabled');
+            $("button[value='Repair/Search']").removeAttr("disabled");
+        }
+    }
+</script>
+<div class="blog-masthead">
+    <nav class="navbar navbar-default navbar-fixed-top blog-nav" role="navigation">
+        <div class="container-fluid" id="navfluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"><img src="/Content/tm/images/logo1.png" alt="ЗАО ИнделКо. Системы телемеханики."></a>
+            </div>
+            <div class="collapse navbar-collapse" id="navigationbar">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a class="blog-nav-item" href="Index"> <i class="fa fa-sign-out"></i>Выйти</a> </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+</div>
+<div class="config-search col-md-12 col-xs-12">
+    <div class="shed">
+        <div class="well" style="height: 40px;">
+            <button value="Repair/MainAcct" title="Выставить счет" class="btn btn-sm btn-primary col-md-2" style="position: absolute; right: 0; display: none"><i class="fa fa-file"></i> Выставить счет</button>
+            <div class="input-group hidden-xs col-xs-12" style="max-width: 1300px; float:left">
+                <span>
+                    <input style="max-width: 135px" value="@Session["dateFrom"]" onchange="onChangeFilters()" class="datepicker form-control" autocomplete="off" data-provide="datepicker" placeholder="Начало периода" id="Datefrom" name="Datefrom" />
+                </span>
+                <span>
+                    <input style="max-width: 135px" value="@Session["toDate"]" onchange="onChangeFilters()" class="datepicker form-control" autocomplete="off" data-provide="datepicker" placeholder="Конец периода" id="ToDate" name="ToDate" />
+                </span>
+                <span>
+                    <select style="max-width: 135px; border-radius: 0px" id="SelectedSort" onchange="onChangeFilters()" class="form-control">
+                        @if (Convert.ToInt32(Session["SortFilter"]) == 0)
+                        {
+                            <option disabled="disabled" selected="" value="0">Сортировать по </option>
+                        }
+                        else
+                        {
+                            <option value="0">Сортировать по</option>
+                        }
+                        @if (Convert.ToInt32(Session["SortFilter"]) == 1)
+                        {
+                            <option value="1" selected="">Заказчику</option>
+                        }
+                        else
+                        {
+                            <option value="1">Заказчику</option>
+                        }
+                        @if (Convert.ToInt32(Session["SortFilter"]) == 2)
+                        {
+                            <option value="2" selected="">Изделию</option>
+                        }
+                        else
+                        {
+                            <option value="2">Изделию</option>
+                        }
+                        @if (Convert.ToInt32(Session["SortFilter"]) == 3)
+                        {
+                            <option value="3" selected="">Заводскому №</option>
+                        }
+                        else
+                        {
+                            <option value="3">Заводскому №</option>
+                        }
+                        @if (Convert.ToInt32(Session["SortFilter"]) == 4)
+                        {
+                            <option value="4" selected="">Номеру RTU</option>
+                        }
+                        else
+                        {
+                            <option value="4">Номеру RTU</option>
+                        }
+                        @if (Convert.ToInt32(Session["SortFilter"]) == 5)
+                        {
+                            <option selected="" value="5">Дате</option>
+                        }
+                        else
+                        {
+                            <option value="5">Дате</option>
+                        }
+                    </select>
+                    <button id="sortDirection" onclick="changeSortDirection()" value="true" style="background-color: transparent; border-color: #337AB7" title="По возрастанию" 
+                                    class="btn btn-sm btn-primary-outline"><i id="sortIcon" style="height: 30px; width:30px" class="bi bi-sort-up"></i></button>
+                    <button id="filters" value="false" onclick="filterClick()" title="Применить фильтры" style="background-color: #337AB7; 
+                                border-color: #337AB7;" class="btn btn-sm btn-primary">Применить фильтры</button>
+                </span>
+                <span>
+                    <input style="max-width: 180px" id="myInputSearch" onended="" onkeyup="ifWritten(this.value)" type="search" value="@Session["Key"]" class="form-control" aria-label="..." placeholder="Введите запрос для поиска...">
+                    <select style="max-width: 145px" id="mySelectBox" class="form-control" onchange="ifSelected(this.value)">
+                        @if (Convert.ToInt32(Session["Condition"]) == 0)
+                        {
+                            <option disabled="disabled" selected="" value="0">Поиск по </option>
+                        }
+                        else
+                        {
+                            <option value="0">Поиск по</option>
+                        }
+                        @if (Convert.ToInt32(Session["Condition"]) == 1)
+                        {
+                            <option value="1" selected="">Заказчику</option>
+                        }
+                        else
+                        {
+                            <option value="1">Заказчику</option>
+                        }
+                        @if (Convert.ToInt32(Session["Condition"]) == 2)
+                        {
+                            <option value="2" selected="">Изделию</option>
+                        }
+                        else
+                        {
+                            <option value="2">Изделию</option>
+                        }
+                        @if (Convert.ToInt32(Session["Condition"]) == 3)
+                        {
+                            <option value="3" selected="">Заводскому №</option>
+                        }
+                        else
+                        {
+                            <option value="3">Заводскому №</option>
+                        }
+                        @if (Convert.ToInt32(Session["Condition"]) == 4)
+                        {
+                            <option value="4" selected="">Номеру RTU</option>
+                        }
+                        else
+                        {
+                            <option value="4">Номеру RTU</option>
+                        }
+                    </select>
+                    <button value="Repair/Cansel" style="background-color: transparent; border-color: #337AB7" title="Очистить поиск" class="btn btn-sm btn-primary-outline"><i style="height: 10px; width:10px" class="fa fa-close"></i></button>
+                </span>
+                <button id="search_" value="Repair/Search" title="Найти" class="btn btn-sm btn-primary col-xs-6" disabled="disabled"><i class="fa fa-plus"></i> Найти</button>
+                <!-- /btn-group -->
+            </div><!-- /input-group -->
+        </div>
+
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row full-height">
+    <div class="col-sm-12 col-md-12 reports">
+
+        <div class="row placeholders main-content">
+
+            <div id="reportData" class="panel-body" style="margin-top: 0; margin-bottom: 0">
+                @Html.Partial("_ViewDeletedRepairs", Model)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" id="modal_dialog">
+
+</div>
+<script>
+    function changeSortDirection() {
+        let direction = document.getElementById('sortDirection');
+        let i = document.getElementById('sortIcon')
+        if (direction.title == 'По возрастанию') {
+            direction.title = 'По убыванию';
+            direction.value = false;
+            i.classList.remove('bi-sort-up');
+            i.classList.add('bi-sort-down');
+        }
+        else {
+            direction.title = 'По возрастанию';
+            direction.value = true;
+            i.classList.remove('bi-sort-down');
+            i.classList.add('bi-sort-up');
+        }
+        onChangeFilters();
+    }
+    function filterClick() {
+        let filter = document.getElementById('filters');
+        var dateFrom = $("#Datefrom").val();
+        var toDate = $("#ToDate").val();
+        var sortFilter = $("#SelectedSort").val();
+        let direction = document.getElementById('sortDirection');
+        var sortDirection = direction.value;
+        if (filter.textContent == 'Отменить фильтры') {
+            filter.textContent = 'Применить фильтры';
+            $.ajax({
+                type: 'get',
+                url: "../Main/_ViewDeletedRepairs" + "?" + "datefrom=" + "" +
+                    "&toDate=" + "" + "&selectedSort=" + 5 + "&sortDirection=" + true,
+                success: function (data) {
+                    $("#reportData").html(data);
+                }
+            });
+        }
+        else {
+            filter.textContent = 'Отменить фильтры';
+            $.ajax({
+                type: 'get',
+                url: "../Main/_ViewDeletedRepairs" + "?" + "datefrom=" + dateFrom +
+                    "&toDate=" + toDate + "&selectedSort=" + sortFilter + "&sortDirection=" + sortDirection,
+                success: function (data) {
+                    $("#reportData").html(data);
+                }
+            });
+        }
+    }
+    function onChangeFilters() {
+        let filter = document.getElementById('filters');
+        var dateFrom = $("#Datefrom").val();
+        var toDate = $("#ToDate").val();
+        var sortFilter = $("#SelectedSort").val();
+        let direction = document.getElementById('sortDirection');
+        var sortDirection = direction.value;
+        if (filter.textContent == 'Отменить фильтры') {
+            $.ajax({
+                type: 'get',
+                url: "../Main/_ViewDeletedRepairs" + "?" + "datefrom=" + dateFrom +
+                    "&toDate=" + toDate + "&selectedSort=" + sortFilter + "&sortDirection=" + sortDirection,
+                success: function (data) {
+                    $("#reportData").html(data);
+                }
+            });
+        }
+    }
+    $(document).ready(function () {
+        $('body').css('overflow', 'hidden');
+        if ('@Session["Key"]' === "") {
+            $("#myInputSearch").attr("disabled", "disabled");
+            $("button[value='Repair/Search']").attr("disabled", "disabled");
+            }
+        else {
+            $("button[value='Repair/Cansel']").css('display', 'block');
+            $("#myInputSearch").removeAttr("disabled");
+            $("button[value='Repair/Search']").removeAttr("disabled");
+        }
+        if ($('input[type="checkbox"]').attr("checked") == 'checked') {
+        $("button[value='Repair/MainAcct']").css('display', 'block');
+        }
+        $('.datepicker').datepicker({
+            todayBtn: "linked",
+            language: "ru-RU",
+            format: "dd.mm.yyyy",
+            autoclose: true
+        });
+
+        $
+        $('.datepicker').change(function () {
+                var date = $(this).datepicker('getDate');
+                var day = date.getDate();
+                var year = date.getFullYear();
+                var month = date.getMonth() + 1;
+                switch (date.getMonth()) {
+                    case "0":
+                    case "1":
+                    case "2":
+                    case "3":
+                    case "4":
+                    case "5":
+                    case "6":
+                    case "7":
+                    case "8":
+                    $(this).val(day + ".0" + month + "." + year);
+                        break;
+                    case "9":
+                    case "10":
+                    case "11":
+                    $(this).val(day + "." + month + "." + year);
+                }
+        });
+
+        $("button[value='Repair/Search']").on('click', function () {
+            var key = $("#myInputSearch").val();
+            var condition = $("#mySelectBox").val();
+            let filter = document.getElementById('filters');
+            var dateFrom = $("#Datefrom").val();
+            var toDate = $("#ToDate").val();
+            var sortFilter = $("#SelectedSort").val();
+            var sortDirection = filter.value;
+            $("button[value='Repair/Cansel']").css('display', 'block');
+            $.ajax({
+                type: 'get',
+                url: "../Main/_ViewDeletedRepairs" + "?condition=" + condition + "&key=" + key
+                    + "&datefrom=" + dateFrom + "&toDate=" + toDate + "&selectedSort="
+                    + sortFilter + "&sortDirection=" + sortDirection,
+                success: function (data) {
+                    $("#reportData").html(data);
+                }
+            });
+        });
+
+        $(document).on("keydown", function (e) {
+            var keycode = e.which || e.keycode;
+            if (keycode === 13) {
+                startSearch();
+            }
+        });
+
+        $(document).on("keydown", function (e) {
+            var keycode = e.which || e.keycode;
+            if (keycode === 13) {
+                startSearch();
+            }
+        });
+    
+    $("button[value='Repair/Cansel']").on('click', function () {
+        $("#myInputSearch").val([""]);
+        $("button[value='Repair/Search']").attr("disabled", "disabled");
+        $.ajax({
+                type: 'get',
+            url: "../Main/_ViewDeletedRepairs" + "?condition=" + "" + "&key=" + 0,
+            success: function (data) {
+                $("#reportData").html(data);
+                    }
+                });
+            });
+    $("button[value='Repair/Update']").on('click', function () {
+        var repairId = $(this).attr('data-id-device');
+        $.ajax({
+                type: 'get',
+            url: "../" + $(this).val() + "?Id=" + repairId,
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+                    }
+                });
+            });
+    $("button[value='Repair/Return']").on('click', function () {
+                var repairId = $(this).attr('data-id-device');
+                var status = $(this).attr('status');
+        $.ajax({
+                type: 'get',
+            url: "../" + $(this).val() + "?id=" + repairId + "&Status=" + status,
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+
+                    }
+                });
+            });
+    $(document).on('click', 'button[type="submit"]', function () {
+        $("#modal_dialog").modal('hide');
+            });
+
+        });
+</script>

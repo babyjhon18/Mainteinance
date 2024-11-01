@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "Выбор Справочника";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="navbar" role="navigation">
+
+    <div class="blog-masthead">
+        <nav class="navbar navbar-default navbar-fixed-top blog-nav" role="navigation">
+            <div class="container-fluid" id="navfluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#"><img src="@Url.Content("~/Content/tm/images/logo1.png")" alt="ЗАО ИнделКо. Системы телемеханики."></a>
+                </div>
+                <div class="collapse navbar-collapse" id="navigationbar" style="margin-bottom: 20px;">
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+        </nav>
+    </div>
+</div>
+<div class="vertical-center" style="height: auto;">
+    <div class="container no-center">
+        <a class="btn btn-default btn-lg" href="/Main/Clients"><i style="float: left" class="fa fa-user fa-3x"></i><h1> <span>Клиенты</span></h1></a><br>
+        <a class="btn btn-default btn-lg" href="/Main/Accessories"><i style="float: left" class="fa fa-cogs fa-3x"></i><h1> <span>Комлектующие</span></h1></a><br>
+        <a class="btn btn-default btn-lg" href="/Main/ProductsList"><i style="float: left" class="fa fa-cog fa-3x"></i><h1> <span>Изделия</span></h1></a><br>
+        <a class="btn btn-default btn-lg" href="/Main/Jobs"><i style="float: left" class="fa fa-wrench fa-3x"></i><h1> <span>Работы</span></h1></a><br>
+        <a class="btn btn-default btn-lg" href="/Main/Repair"><i style="float: left" class="fa fa-wrench fa-3x"></i><h1> <span>Журнал учёта ремонтов</span></h1></a><br>
+        <a class="btn btn-default btn-lg" href="/Main/Indicators"><i style="float: left" class="fa fa-info-circle fa-3x"></i><h1> <span>Показатели</span></h1></a><br>
+        <a class="btn btn-default btn-lg" href="/Main/DeletedRepairs"><i style="float: left" class="fa fa-trash fa-3x"></i><h1> <span>Корзина</span></h1></a><br>
+    </div>
+</div>

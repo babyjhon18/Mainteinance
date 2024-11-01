@@ -1,0 +1,34 @@
+﻿@model Project.Models.IndicatorsClass
+@{
+    ViewBag.Title = "Показатели";
+}
+<div class="blog-masthead">
+    <nav class="navbar navbar-default navbar-fixed-top blog-nav" role="navigation">
+        <div class="container-fluid" id="navfluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#"><img src="/Content/tm/images/logo1.png" alt="ЗАО ИнделКо. Системы телемеханики."></a>
+            </div>
+            <div class="collapse navbar-collapse" id="navigationbar">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a class="blog-nav-item" href="Index"> <i class="fa fa-sign-out"></i>Выйти</a> </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+</div>
+<div class="modal" id="modal_dialog">
+
+</div>
+<div class="clearfix"></div>
+<div class="row full-height">
+    <div class="col-sm-12 col-md-12 reports">
+        <div class="row placeholders main-content">
+            <div id="reportData" class="panel-body" style="margin-top: 0;">
+                @Html.Partial("_ViewIndicators", Model)
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,345 @@
+﻿@model IEnumerable<Project.Models.Repairs>
+@using System.Data.Entity;
+@using Project.Models;
+
+@{
+    Layout = null;
+    var i = 1;
+    DataBaseContext dataBase = new DataBaseContext();
+    Accessories accessories = new Accessories();
+    Jobs jobs = new Jobs();
+    DateTime MinDate = new DateTime();
+}
+<div class="row" style="height: none">
+    <div class="col-md-12">
+            <div class="panel-heading">
+                <h4 class="report_header">
+                    <i class="fa fa-cogs"></i> Журнал учета ремонтов
+                </h4>
+            </div>
+            <div id="archdata" style="overflow-y:scroll; height:75vh">
+                <table class="table table-bordered datatable">
+                    <tr class="toptop">
+                        <th style="width: 2% !important;"></th>
+                        <th style="width: 2% !important;"></th>
+                        <th style="width: 3% !important;">№ п/п</th>
+                        <th style="width: 10% !important;">Заказчик</th>
+                        <th>Контактное лицо</th>
+                        <th style="width: 10% !important;">Изделие</th>
+                        <th>Заводской №</th>
+                        <th>Дата сдачи в ремонт</th>
+                        <th>Ремонт выполнен сотрудником</th>
+                        <th>Неисправность</th>
+                        <th>Комплектность</th>
+                        <th style="width: 20% !important;">Выполненые работы, использованные материалы</th>
+                        <th style="width: 25% !important">Примечания</th>
+                        <th style="width: 15% !important">Дата возврата заказчику</th>
+                    </tr>
+                        @foreach (var row in Model)
+                            {
+                            if(!row.Deleted)
+                            {
+                                <tr id="@row.Id" class="table-item">
+                                    <td>
+                                        <div>
+                                            @if (row.Status != "accepted" || row.Status == "ready")
+                                            {
+                                                <input repairId="@row.Id" name="repair" style="float: left; margin-left: 3px" type="checkbox" />
+                                            }
+                                        </div>
+                                        <div style="margin-top: 20px">
+                                            <i style="display:none; color: mediumseagreen;" class="fa fa-file @row.Acct"></i>
+                                        </div>
+                                    </td>
+                                    <td>
+
+                                        <div class="btn-group super-navi">
+                                            <button id="button+@row.Id" class="btn btn-primary dropdown-toggle btn-xs btn-radius @row.Status" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fa fa-bars"></i>
+                                            </button>
+                                            <ul class="dropdown-menu devdata" value="@row.Id">
+                                                @if (row.Status == "ready")
+                                                {
+                                                    <li>
+                                                        <button data-id-device="@row.Id" status="@row.Status" value="Repair/EditJobs" title="Выполненные работы" class="">
+                                                            <i class="fa fa-pencil"></i> Выполненные работы
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button data-id-device="@row.Id" value="Repair/Return" title="Возврат заказа " class="">
+                                                            <i class="fa fa-pencil"></i> Возврат заказа
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button data-id-device="@row.Id" data-id-product="@row.ProductId.ToString()" value="Repair/Acct" title="Выставить счет " class="">
+                                                            <i class="fa fa-file"></i> Выставить счет
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button data-id-device="@row.Id" value="Repair/Edit" title="Изменить" class="">
+                                                            <i class="fa fa-pencil"></i> Изменить
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button data-id-device="@row.Id" status="@row.Status" value="Repair/Delete" title="Удалить ремонт" class="">
+                                                            <i class="fa fa-close"></i> Удалить ремонт
+                                                        </button>
+                                                    </li>
+                                                }
+                                                @if (row.Status == "accepted")
+                                                {
+                                                    <li>
+                                                        <button data-id-device="@row.Id" data-id-product="@row.ProductId.ToString()" status="@row.Status" value="Repair/Update" title="Выполненные работы" class="">
+                                                            <i class="fa fa-pencil"></i> Выполненные работы
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button data-id-device="@row.Id" value="Repair/Edit" title="Изменить" class="">
+                                                            <i class="fa fa-pencil"></i> Изменить
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button data-id-device="@row.Id" status="@row.Status" value="Repair/Delete" title="Удалить ремонт" class="">
+                                                            <i class="fa fa-close"></i> Удалить ремонт
+                                                        </button>
+                                                    </li>
+                                                }
+                                                @if (row.Status != "accepted" && row.Status != "ready")
+                                                {
+                                                    <li>
+                                                        <button data-id-device="@row.Id" data-id-product="@row.ProductId.ToString()" status="@row.Status" value="Repair/EditJobs" title="Выполненные работы" class="">
+                                                            <i class="fa fa-pencil"></i> Выполненные работы
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button data-id-device="@row.Id" value="Repair/Return" title="Возврат заказа " class="">
+                                                            <i class="fa fa-pencil"></i> Возврат заказа
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button data-id-device="@row.Id" value="Repair/Acct" title="Выставить счет " class="">
+                                                            <i class="fa fa-file"></i> Выставить счет
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button data-id-device="@row.Id" data-id-product="@row.ProductId.ToString()" value="Repair/Edit" title="Выставить счет " class="">
+                                                            <i class="fa fa-file-text"></i> Изменить примечание
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <button data-id-device="@row.Id" status="@row.Status" value="Repair/Delete" title="Удалить ремонт" class="">
+                                                            <i class="fa fa-close"></i> Удалить ремонт
+                                                        </button>
+                                                    </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td>@i</td>
+
+                                    <td>
+                                        @{var client = dataBase.Clients.Where(p => p.Id == row.ClientId).Select(p => p.Name).FirstOrDefault();
+                                            @client
+                                        }
+                                    </td>
+                                    <td>@row.ContactPerson</td>
+                                    <td>
+                                        @{
+                                            var product = dataBase.Products.Where(p => p.Id == row.ProductId).Select(p => p.Name).FirstOrDefault();
+                                            @product;
+                                        }
+                                    </td>
+                                    <td>@row.FactoryNumber</td>
+                                    <td>@(row.DateToRepair.ToShortDateString() == DateTime.MinValue.ToShortDateString() ? "" : row.DateToRepair.ToShortDateString())</td>
+                                    <td>
+                                        @{
+                                            var repsponsible = dataBase.ResponsiblePersonsProperties.Where(p => p.id == row.ResponsiblePersonId).Select(p => p.FullName).FirstOrDefault();
+                                            @repsponsible;
+                                        }
+                                    </td>
+                                    <td>@row.Defect</td>
+                                    <td>@row.Set</td>
+                                    <td>
+                                        @{
+                                            var job = row.Jobs != null ? row.Jobs : "";
+                                            var material = row.Materials != null ? row.Materials : "";
+                                            foreach (var item in job.Split(','))
+                                            {
+                                                if (item != "")
+                                                {
+                                                    int value = Convert.ToInt32(item.ToString());
+                                                    var jb = dataBase.Jobs.Where(p => p.Id == value).Select(p => p.Name).FirstOrDefault();
+                                                    @jb
+                                                    <br />
+                                                }
+                                            }
+                                            foreach (var item in material.Split(','))
+                                            {
+                                                if (item != "")
+                                                {
+                                                    try
+                                                    {
+                                                        int accessoryID = Convert.ToInt32(item.ToString());
+                                                        var productItem =
+                                                            dataBase.Materials
+                                                            .Where(p => p.ProductId == row.ProductId &&
+                                                            p.AccessoryId == accessoryID).FirstOrDefault();
+                                                        if (productItem != null)
+                                                        {
+                                                            var acc = dataBase.Accessories.Where(a => a.Id == productItem.AccessoryId).
+                                                                Select(p => p.Name).FirstOrDefault();
+                                                            @acc
+                                                        }
+                                                        <br />
+                                                    }
+                                                    catch { }
+                                                }
+                                            }
+                                        }
+                                    </td>
+                                    <td>@row.Note</td>
+                                    <td>@(row.DateToClient.ToShortDateString() == DateTime.MinValue.ToShortDateString() ? "" : row.DateToClient.ToShortDateString())</td>
+                                </tr>
+
+                                i++;
+                            }
+                        }
+                </table>
+            </div>
+        </div>
+    </div>
+<script>
+    $(document).ready(function () {
+        if ('@Session["LastUpdatedOrCreatedItem"]' != null && '@Session["LastUpdatedOrCreatedItem"]' != "") {
+            var row = document.getElementById('@Session["LastUpdatedOrCreatedItem"]');
+            if (row != null) {
+                row.scrollIntoView({ block: "end", behavior: "smooth" });
+            }
+        }
+    });
+    $("button[value='Repair/Delete']").on('click', function () {
+                var repairId = $(this).attr('data-id-device');
+        $.ajax({
+                type: 'get',
+            url: "../" + $(this).val() + "?id=" + repairId + "&Status=" + true,
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+
+            }
+        });
+    });
+    $("button[value='Repair/Update']").on('click', function () {
+                var repairId = $(this).attr('data-id-device');
+                var status = $(this).attr('status');
+                var productID = $(this).attr('data-id-product');
+        $.ajax({
+                type: 'get',
+            url: "../" + $(this).val() + "?id=" + repairId + "&Status=" + status + "&ProductID=" + productID,
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+
+            }
+        });
+    });
+    $("button[value='Repair/Return']").on('click', function () {
+                var repairId = $(this).attr('data-id-device');
+                var status = $(this).attr('status');
+        $.ajax({
+                type: 'get',
+            url: "../" + $(this).val() + "?id=" + repairId + "&Status=" + status,
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+
+            }
+        });
+    });
+    $("button[value='Repair/Edit']").on('click', function () {
+                var repairId = $(this).attr('data-id-device');
+        $.ajax({
+                type: 'get',
+            url: "../" + $(this).val() + "?id=" + repairId,
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+            }
+        });
+    });
+    $("button[value='Repair/EditJobs']").on('click', function () {
+                var repairId = $(this).attr('data-id-device');
+        $.ajax({
+                type: 'get',
+            url: "../" + $(this).val() + "?id=" + repairId,
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+            }
+        });
+    });
+    $("button[value='Repair/Acct']").on('click', function () {
+        if ($("input[name='repair']:checked").length > 0) {
+            var repairId = "";
+            $.each($("input[name='repair']:checked"), function () {
+                repairId += $(this).attr("repairid") + ',';
+            });
+            if (repairId.includes(',')) {
+                repairId = repairId.slice(0, -1);
+            }
+        }
+        else {
+            var repairId = $(this).attr('data-id-device');
+        }
+        console.log(repairId);
+        $.ajax({
+                type: 'get',
+            url: "../" + $(this).val() + "?ids=" + repairId,
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+            }
+        });
+    });
+
+</script>
+<style>
+    .accepted {
+        background-color: red;
+        border-color: red;
+    }
+
+    .accepted:hover {
+        background-color: red;
+        border-color: red;
+    }
+
+    .accepted:visited {
+        background-color: red;
+        border-color: red;
+    }
+
+    .ready {
+        background-color: greenyellow;
+        border-color: greenyellow;
+    }
+
+    .inprogress {
+        background-color: #ebc31e;
+        border-color: #ebc31e;
+    }
+
+    .ready:hover {
+        background-color: greenyellow;
+        border-color: greenyellow;
+    }
+
+    .ready:visited {
+        background-color: greenyellow;
+        border-color: greenyellow;
+    }
+
+    .acct {
+        display: block !important;
+    }
+</style>

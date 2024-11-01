@@ -1,0 +1,292 @@
+﻿@model Project.Models.RepairClass
+@{
+    Layout = null;
+    var idx = 0;
+}
+<div class="modal-dialog">
+    <div class="modal-content">
+        @using (Html.BeginForm("Acct", "Repair", FormMethod.Post, new
+        { @class = "form-horizontal", @id = "AcctRepairForm", @role = "form" }))
+        {
+            <input type="hidden" value="@ViewBag.IDs" id="Id" name="Id" />
+            <input type="hidden" value="@ViewBag.Client" id="Client" name="Client" />
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title"><i class="fa fa-plus"></i> Выставить счет</h5>
+            </div>
+            <div>
+                @if (ViewBag.ClientLastContractDate == "" && ViewBag.ClientLastContractNumber == "")
+                {
+                    <div style="margin-top: 15px">
+                        <div class="form-group col-lg-12">
+                            <label for="ClientLastContractNumber" style="text-align: right" class="col-lg-6">Номер договора</label>
+                            <div class="col-lg-6">
+                                <input value="@ViewBag.ClientLastContractNumber" defaultValue="" type="text" class="form-control" style="height: 25px; width: 100%; margin-bottom: 5px;" placeholder="Номер договора" id="LastContractNumber" name="LastContractNumber" />
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label for="ClientLastContractDate" style="text-align: right" class="col-lg-6">Дата договора</label>
+                            <div class="col-lg-6">
+                                <input value="@ViewBag.ClientLastContractDate" defaultValue="" class="datepicker" autocomplete="off" style="height: 25px;width: 100%;margin-bottom: 5px;" data-provide="datepicker" placeholder="Дата договора" id="LastContractDate" name="LastContractDate" />
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <input value="@ViewBag.ClientLastContractNumber" defaultValue="" type="hidden" class="form-control" style="height: 25px; width: 100%; margin-bottom: 5px;" placeholder="Номер договора" id="LastContractNumber" name="LastContractNumber" />
+                    <input value="@ViewBag.ClientLastContractDate" defaultValue="" type="hidden" class="datepicker" autocomplete="off" style="height: 25px;width: 100%;margin-bottom: 5px;" data-provide="datepicker" placeholder="Дата договора" id="LastContractDate" name="LastContractDate" />
+                }
+            </div>
+            <div class="form-group col-lg-12">
+                <label for="DateToRepair" style="text-align: right" class="col-lg-6">Дата выставления счёта</label>
+                <div class="col-lg-6">
+                    <input class="datepicker" autocomplete="off" style="height: 25px;width: 100%;margin-bottom: 5px;" data-provide="datepicker" placeholder="Дата выставления счёта" id="DateToAcct" name="DateToAcct" />
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="FactoryNumber" style="text-align: right" class="col-md-6">Номер счёта</label>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" style="height: 25px; width: 100%; margin-bottom: 5px;" placeholder="Номер счёта" id="AcctNumber" name="AcctNumber" />
+                </div>
+            </div>
+            <div class="form-group col-md-12">
+                <label for="ActNumberInDoc" style="text-align: right" class="col-md-6">Номер акта</label>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" style="height: 25px; width: 100%; margin-bottom: 5px;" placeholder="Номер акта" id="ActNumberInDoc" name="ActNumberInDoc" />
+                </div>
+            </div>
+            <!-- accordion -->
+            foreach (var itemRepair in @ViewBag.RepairAndMaterials)
+            {
+                <button type="button" class="accordion OnClickButton" value="selection">@itemRepair.ControllerName</button>
+                <div class="panel">
+                    <div>
+                        <label style="font-size: medium; padding-top: 5px;">Работы</label>
+                        @foreach (var job in @itemRepair.Jobs)
+                        {
+                            <div>
+                                <label style="padding-left: 40px">@job</label>
+                            </div>
+                        }
+                    </div>
+                    <div>
+                        <label style="font-size: medium; padding-top: 5px;">Материалы</label>
+                        @foreach (var accessory in @itemRepair.Accessories)
+                        {
+                            <div>
+                                <label style="padding-left: 40px">@accessory</label>
+                            </div>
+                        }
+                    </div>
+                    <label style="font-size:medium; padding-top: 5px;">Нормы затраченного времени</label>
+                    <div class="form-group col-md-13">
+                        <label for="InputControl" style="text-align: right" class="col-md-6">Входной контроль</label>
+                        <div class="col-md-6">
+                            <input type="number" step="0.1" value="@itemRepair.NormsOfTime.InputControl" class="form-control" style="height: 25px;width: 100%;margin-bottom: 5px;" placeholder="введите норму времени" id="inputControl" name="inputControl-@idx" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-13">
+                        <label for="SearchDefects" style="text-align: right" class="col-md-6">Поиск неисправностей</label>
+                        <div class="col-md-6">
+                            <input type="number" step="0.1" value="@itemRepair.NormsOfTime.SearchDefects" class="form-control" style="height: 25px;width: 100%;margin-bottom: 5px;" placeholder="введите норму времени" id="searchDefects" name="searchDefects-@idx" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-13">
+                        <label for="RestoreDefects" style="text-align: right" class="col-md-6">Устранение неисправностей</label>
+                        <div class="col-md-6">
+                            <input type="number" step="0.1" value="@itemRepair.NormsOfTime.RestoreDefects" class="form-control" style="height: 25px;width: 100%;margin-bottom: 5px;" placeholder="введите норму времени" id="restoreDefects" name="restoreDefects-@idx" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-13">
+                        <label for="UpdateOS" style="text-align: right" class="col-md-6">Обновление ПО</label>
+                        <div class="col-md-6">
+                            <input type="number" step="0.1" value="@itemRepair.NormsOfTime.UpdateOS" class="form-control" style="height: 25px;width: 100%;margin-bottom: 5px;" placeholder="введите норму времени" id="updateOS" name="updateOS-@idx" />
+                        </div>
+                    </div>
+                    <div class="form-group col-md-13">
+                        <label for="Check" style="text-align: right" class="col-md-6">Регулирование, проверка</label>
+                        <div class="col-md-6">
+                            <input type="number" step="0.1" value="@itemRepair.NormsOfTime.Check" class="form-control" style="height: 25px;width: 100%;margin-bottom: 5px;" placeholder="введите норму времени" id="check" name="check-@idx" />
+                        </div>
+                    </div>
+                </div>
+                idx++;
+            }
+            <!--accordion-->
+            <div>
+                <fieldset>
+                    <legend><i class="fa fa-pencil-square-o"></i> Клиент</legend>
+                    <div class="form-group">
+                        <label for="CRPShort" class="col-lg-4 control-label">Ответственное лицо(И.П.)</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" value="@ViewBag.TResponsiblePersons.shortName" placeholder="Ответственное лицо в именительном падеже" id="CRPShort" name="CRPShort"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="CRPLong" class="col-lg-4 control-label">Ответственное лицо(Р.П.)</label>
+                        <div class="col-lg-8">
+                            <input type="text" value="@ViewBag.TResponsiblePersons.name" class="form-control" placeholder="Ответственное лицо в родительном падеже" id="CRPLong" name="CRPLong"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="CRPTitle" class="col-lg-4 control-label">В лице</label>
+                        <div class="col-lg-8">
+                            <input type="text" value="@ViewBag.TResponsiblePersons.JobTitle" class="form-control" placeholder="Пример: генерального директора" id="CRPTitle" name="CRPTitle"/>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend><i class="fa fa-pencil-square-o"></i> Наша сторона</legend>
+                    <div class="form-group">
+                        <label for="ORPShort" class="col-lg-4 control-label">Ответственное лицо(И.П.)</label>
+                        <div class="col-lg-8" style="margin-bottom: 5px; float: right;">
+                            <select data-placeholder="Ответственное лицо в именительном падеже" id="ORPShort" name="ORPShort" style="height: 25px; width: 100%; margin-bottom: 5px;">
+                                @foreach (var i in @ViewBag.ResponsiblePersons)
+                                {
+                                    <option id="@i.id" LongName="@i.name" contractBase="@i.Base" jobTitle="@i.JobTitle" value="@i.shortName">@i.shortName</option>
+                                }
+                            </select>
+                        </div>
+                        <!--<div class="col-lg-8">-->
+                        @*<input type="text" class="form-control" placeholder="Ответственное лицо в именительном падеже" id="PersonShort" name="PersonShort" required />@Html.EditorFor(model => model.ContractNumber, new { htmlAttributes = new { @class = "form-control", @placeholder = "Номер договора" } })*@
+                        <!--</div>-->
+                    </div>
+                    <div class="form-group">
+                        <label for="ORPLong" class="col-lg-4 control-label">Ответственное лицо(Р.П.)</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Ответственное лицо в родительном падеже" id="ORPLong" name="ORPLong" required />
+                        </div>
+                        <div class="col-lg-8">
+                            <input type="text" style="display: none" id="ResponsiblePersonId" name="ResponsiblePersonId" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ORPTitle" class="col-lg-4 control-label">В лице</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Пример: генерального директора" id="ORPTitle" name="ORPTitle" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ContractBase" class="col-lg-4 control-label">На основании</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Пример: Устава " id="ContractBase" name="ContractBase" required />
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div style="text-align: center;margin: 30px;">
+                <h4>Выставить счет @ViewBag.Client на сумму @ViewBag.Value рублей?</h4>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Отмена</button>
+                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Да</button>
+            </div>
+        }
+    </div>
+    </div>
+<style>
+    /*Accordion*/
+    .accordion {
+        background-color: #eee;
+        color: #444;
+        cursor: pointer;
+        padding: 18px;
+        width: 100%;
+        text-align: left;
+        border: none;
+        outline: none;
+        transition: 0.4s;
+    }
+
+    /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+    .active, .accordion:hover {
+        background-color: #ccc;
+    }
+
+    /* Style the accordion panel. Note: hidden by default */
+    .panel {
+        padding: 0 18px;
+        background-color: white;
+        display: none;
+        overflow: hidden;
+    }
+    /*Accordion*/
+    .col-lg-8 {
+        color: black;
+        font-size: 12px;
+    }
+</style>
+<script>
+    $('#ORPShort').on('change', function () {
+        $('#ORPLong').val(this.options[this.selectedIndex].getAttribute('LongName'));
+        $('#ORPTitle').val(this.options[this.selectedIndex].getAttribute('jobTitle'));
+        $('#ContractBase').val(this.options[this.selectedIndex].getAttribute('contractBase'))
+        $('#ResponsiblePersonId').val(this.options[this.selectedIndex].getAttribute('value'));
+    }).trigger('change');
+  //Accordion
+    $(".OnClickButton").on('click', function () {
+        /* Toggle between adding and removing the "active" class,
+        to highlight the button that controls the panel */
+        this.classList.toggle("active");
+        
+        /* Toggle between hiding and showing the active panel */
+        var panel = this.nextElementSibling;
+        if (panel.style.display === "block") {
+            panel.style.display = "none";
+        } else {
+            panel.style.display = "block";
+        }
+    });
+    //Accordion
+    $
+    $(document).ready(function () {
+        $('.datepicker').datepicker({
+            todayBtn: "linked",
+            language: "ru-RU",
+            format: "dd-mm-yyyy",
+            autoclose: true
+        });
+
+        $('.datepicker').change(function () {
+            var date = $(this).datepicker('getDate');
+            var day = date.getDate();
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            switch (date.getMonth()) {
+                case "0":
+                case "1":
+                case "2":
+                case "3":
+                case "4":
+                case "5":
+                case "6":
+                case "7":
+                case "8":
+                    $(this).val(day + ".0" + month + "." + year);
+                    break;
+                case "9":
+                case "10":
+                case "11":
+                    $(this).val(day + "." + month + "." + year);
+            }
+
+        });
+        $(".chosen-select").chosen({
+            width: "100%",
+            allow_single_deselect: true
+        });
+      $("#IsActive")
+        .on("change",
+          function() {
+            if ($(this).is(":checked")) {
+              $(this).val("true");
+            } else {
+              $(this).val("false");
+            }
+          });
+       
+    });
+</script>

@@ -1,0 +1,95 @@
+﻿﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="@Url.Content("~/Content/tm/images/favicon.png")">
+
+    <title>@ViewBag.Title</title>
+    
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="@Url.Content("~/Content/tm/css/print.css")" media="print">
+    <link href="@Url.Content("~/Content/tm/datepicker/css/datepicker3.css")" rel="stylesheet" media="screen">
+    <link href="@Url.Content("~/Content/tm/datepicker/css/bootstrap-timepicker.min.css")" rel="stylesheet" media="screen">
+    <link href="@Url.Content("~/Content/tm/css/bootstrap.min.css")" rel="stylesheet" media="screen">
+    <link href="@Url.Content("~/Content/tm/css/leaflet.css")" rel="stylesheet" media="screen">
+    <link href="@Url.Content("~/Content/tm/css/nprogress.css")" rel="stylesheet" media="screen">
+    <link href="@Url.Content("~/Content/tm/css/bootstrap.min.css")" rel="stylesheet" media="screen">
+    <link href="@Url.Content("~/Content/tm/css/leaflet.css")" rel="stylesheet" media="screen">
+
+    <!-- Custom styles for this template -->
+    <link href="@Url.Content("~/Content/tm/css/dashboard.css")" rel="stylesheet" media="screen">
+    <link rel="stylesheet" href="@Url.Content("~/Content/tm/css/font-awesome.min.css")" media="screen">
+
+    <script src="@Url.Content("~/Content/bs/js/jq.js")"></script>
+
+    @*<link href="@Url.Content("~/Content/tm/css/chosen.min.css")" rel="stylesheet" media="screen">*@
+    <link href="@Url.Content("~/Content/bs/custom.css")" rel="stylesheet" media="screen">
+
+    <!--Chosen-->
+    <link href="@Url.Content("~/Content/chosen/chosen.min.css")" rel="stylesheet" media="screen">
+    <link href="@Url.Content("~/Content/chosen/chosen.css")" rel="stylesheet" media="screen">
+    <script src="@Url.Content("~/Content/chosen/chosen.jquery.min.js")"></script>
+    <script src="@Url.Content("~/Content/chosen/chosen.jquery.js")"></script>
+    <script src="@Url.Content("~/Content/chosen/chosen.proto.min.js")"></script>
+    <script src="@Url.Content("~/Content/chosen/chosen.proto.js")"></script>
+</head>
+<body>
+    <div id="loading-indicator" style="display: none"></div>
+
+    <div class="container-fluid full-height" id="main-container" style="padding-top: 70px;">
+        @RenderBody()
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="@Url.Content("~/Content/tm/js/nprogress.js")"></script>
+    <script src="@Url.Content("~/Content/tm/js/bootstrap.min.js")"></script>
+    <script src="@Url.Content("~/Content/tm/js/bootbox.min.js")"></script>
+    <script src="@Url.Content("~/Content/tm/js/ErrorConfig.js")"></script>
+    <script src="@Url.Content("~/Content/tm/js/Timer.js")"></script>
+    <script src="@Url.Content("~/Content/tm/js/scripts.js")"></script>
+    <script src="@Url.Content("~/Content/tm/js/cookie_for_tree.js")"></script>
+    <script src="@Url.Content("~/Content/bs/js/jquery.validate.min.js")"></script>
+    <script src="@Url.Content("~/Content/bs/js/localization/messages_ru.js")"></script>
+    <script src="@Url.Content("~/Content/tm/js/browser.js")"></script>
+    <script src="@Url.Content("~/Content/tm/js/mask.js")"></script>
+    <script src="@Url.Content("~/Content/tm/datepicker/js/bootstrap-datepicker.js")"></script>
+    <script src="@Url.Content("~/Content/tm/datepicker/js/bootstrap-timepicker.min.js")"></script>
+    <script src="@Url.Content("~/Content/tm/datepicker/js/locales/bootstrap-datepicker.ru.js")"></script>
+    <script src="@Url.Content("~/Content/tm/js/date.format.js")"></script>
+
+    <!-- local storage -->
+    <script src="@Url.Content("~/Content/tm/js/storage.js")"></script>
+    <script src="@Url.Content("~/Content/tm/js/print.js")"></script>
+
+
+    <!-- splitter -->
+
+    <script type="text/javascript" src="@Url.Content("~/Content/tm/js/chosen.jquery.min.js")"></script>
+    <link href="@Url.Content("~/Content/tm/css/chosen.min.css")" rel="stylesheet" media="screen">
+
+    <script type="text/javascript">
+        $(document).ajaxSend(function (event, request, settings) {
+            if (settings.url !== "/Auth/IsUniqueUser")
+                $('#loading-indicator').show().center();
+            if ($('#reportData').is('div'))
+                $('body').css("opacity", "0.7");
+        });
+
+        $(document).ajaxComplete(function (event, request, settings) {
+            $('#loading-indicator').hide();
+            $('body').css("opacity", "1");
+        });
+        $('body').show();
+        $('.version').text(NProgress.version);
+        NProgress.start();
+        setTimeout(function () { NProgress.done(); $('.fade').removeClass('out'); }, 1000);
+    </script>
+</body>
+
+</html>

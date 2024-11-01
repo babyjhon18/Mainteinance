@@ -1,0 +1,293 @@
+﻿@model Project.Models.RepairClass
+@{
+    Layout = null;
+    var client = "";
+    var product = "";
+}
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        @using (Html.BeginForm("Create", "Repair", FormMethod.Post, new { @class = "form-horizontal", @name="CreateRepairFormName", @id = "CreateRepairForm", @role = "form" }))
+        {
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title"><i class="fa fa-plus"></i> Добавить ремонт</h5>
+            </div>
+            <div class="modal-body">
+                <div id="data-table" style="display: block">
+                    <div class="form-group">
+                        <label for="ClientName" class="col-lg-4 control-label">Заказчик</label>
+                        <div class="col-lg-8">
+                            <select class="form-control client-select chosen-select" placeholder="Заказчик" id="Client" name="Client" style="width: 257px !important; float: left; border-radius: 0px;">
+                                @foreach (var i in Model.Clients)
+                                {
+                                    <option id="@i.Id" value="@i.Id">@i.Name</option>
+                                    client = i.Name;
+                                }
+                            </select>
+                            <span id="add" class="button8" style="cursor: pointer;display: inline-block;color: #428bca;text-decoration: none;user-select: none;outline: none;border: 1px solid;border-radius: 1px;transition: 0.2s;width: 25px;height: 25px;/* display: inline-block;"><i style="margin-top: -10px;margin: 5px;" class="fa fa-plus"></i></span>
+                            <input type="text" style="display:none" class="form-control client-input" placeholder="Заказчик" id="NewClient" name="NewClient" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ContactPerson" class="col-lg-4 control-label">Контактное лицо</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Контактное лицо, телефон" id="ContactPerson" name="ContactPerson" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Product" class="col-lg-4 control-label">Изделие</label>
+                        <div class="col-lg-8">
+                            <select class="chosen-select" placeholder="Изделие" id="Product" name="Product">
+                                @foreach (var i in Model.Products)
+                                {
+                                    <option id="@i.Id" value="@i.Id">@i.Name</option>
+                                    product = i.Name;
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="FactoryNumber" class="col-lg-4 control-label">Заводской номер</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Заводской номер" id="FactoryNumber" name="FactoryNumber" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="RTUNumber" class="col-lg-4 control-label">Номер RTU</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Номер RTU" id="RTUNumber" name="RTUNumber" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="DateToRepair" class="col-lg-4 control-label">Дата сдачи в ремонт</label>
+                        <div class="col-lg-8">
+                            <input class="datepicker" autocomplete="off" style="height: 25px;width: 100%;margin-bottom: 5px;" data-provide="datepicker" placeholder="Дата сдачи в ремонт" id="DateToRepair" name="DateToRepair" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Defect" class="col-lg-4 control-label">Неисправность</label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" placeholder="Неисправность" id="Defect" name="Defect" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="Set" class="col-lg-4 control-label">Комплектность</label>
+                        <div class="col-lg-8" style="margin-left: -15px;">
+                            <div class="col-lg-5">
+                                <input type="hidden" class="form-control" placeholder="Комплектность" id="Set" name="Set" />
+                                <input type="radio" name="1" value="В корпусе" style=" margin-right: 10px;" />в корпусе<br />
+                                <input type="radio" name="1" value="Плата" style=" margin-right: 10px; margin-top: 7px;" />плата<br />
+                                <input type="checkbox" name="3" style="margin-right: 10px; margin-top: 7px;" />Антенна<br />
+
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="row">
+                                    <label for="Defect" class="col-lg-8 control-label" style="margin-top: 3px; margin-right: 4px; width: 120px; text-align: left;">Кабельные вводы</label>
+                                    <input type="number" class="form-control" name="5" style="width: 40px;" min="0" max="4" value="0" />
+                                </div>
+                                <div class="row">
+                                    <label for="Defect" class="col-lg-8 control-label" style="margin-top: 3px; margin-right: 4px; width: 120px;text-align: left;">Заглушки кабельных вводов</label>
+                                    <input type="number" class="form-control" name="6" style="width: 40px;" min="0" max="4" value="0" />
+                                </div>
+
+                            </div>
+                            <div class="col-lg-12" style="margin-top: -10px;">
+                                <input type="checkbox" name="7" style="margin-right: 10px;" />Блок питания<br />
+                                <input type="checkbox" name="4" style="margin-right: 10px;" />Кабель питания<br />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Note" class="col-lg-4 control-label">Примечание</label>
+                    <div class="col-lg-8">
+                        <input type="text" class="form-control" placeholder="Примечание" id="Note" name="Note" />
+                    </div>
+                    <div id="existedRepair" class="col-lg-12" style="display: none">
+                        <label for="Error" style="font-size:initial" class="control-label">Невозможно добавить ремонт, так как он уже существует!</label> 
+                    </div>
+                </div>
+                @*<table id="print-reports" class="table table-bordered table-condensed datatable print" style="display: none; font-size: 52px">
+                        <tr>
+                            <td style="text-align: left">
+                                <img src="~/Content/indellogo.png"><br /><br />
+                                <span>
+                                    ЗАО «ИнДелКо»<br />
+                                    220012 Республика Беларусь<br />
+                                    г. Минск, ул. Чернышевского, 10а, 207<br />
+                                    тел.: (017) 280-08-79, 280-09-12, 280-09-29<br />
+                                    факс: (017) 280-09-23<br />
+                                    УНН: 100456657 ОКПО: 14590353<br />
+                                </span>
+                            </td>
+                        </tr><br />
+                        <tr><td colspan="3" id="client"></td></tr>
+                        <tr><td id="product"></td><td id="factoryNumber"></td><td id="rtu"></td></tr>
+                        <tr><td id="date"></td><td colspan="2" id="defect"></td></tr>
+                        <tr><td colspan="3" id="set"></td></tr>
+                        <tr><td colspan="2" align="left">Приняла Кашляк Г.Е. __________</td><td>Сдал______________________</td></tr>
+                    </table>*@
+            </div>
+            <div class="modal-footer">
+                @*<button type="submit" id="submit" class="btn btn-sm btn-primary"  name="action" value="print"><i class="fa fa-print"></i> Печать</button>*@
+                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Отмена</button>
+                <button type="submit" id="submit" name="action" value="save" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Добавить</button>
+            </div>
+        }
+        </div>
+    </div>
+
+<script>
+    @*$(".print-reports-btn").click(function (e) {
+        $('#print-reports').css('display', 'block');
+            var sett ="";
+            if($('input[name="1"]').is(':checked')) {
+                sett += $('input[name="1"]:checked').val() + "; ";
+            }
+            if($('input[name="3"]').is(':checked')) {
+                sett += "Антенна" + "; ";
+            }
+            if($('input[name="4"]').is(':checked')) {
+                sett += "Кабель питания" + "; ";
+            }
+            sett +="Кабельные вводы: " + $('input[name="5"]').val() + "; ";
+            sett +="Заглушки кабельных вводов: " + $('input[name="6"]').val() + "; ";
+
+            if($('input[name="7"]').is(':checked')) {
+                sett += "Блок питания" + "; ";
+            }
+           if($('#NewClient').val() == "") {
+                $('table #client').html('<span>@client</span>');
+           }
+           else { $('table #client').html('<span>Заказчик:  '+$('#NewClient').val()+'</span>'); }
+           $('table #product').html('<span>Изделие:  @product</span>');
+           $('table #factoryNumber').html('<span>Заводской номер:  '+$('#FactoryNumber').val()+'</span>');
+           $('table #rtu').html('<span>Номер RTU:  '+$('#RTUNumber').val()+'</span>');
+           $('table #date').html('<span>Дата сдачи в ремонт:  '+$('#DateToRepair').val()+'</span>');
+           $('table #defect').html('<span>Неисправность:  '+$('#Defect').val()+'</span>');
+           $('#set').html('<span>Комплектность:  '+sett+'</span>');
+            e.preventDefault();
+        $("#print-reports").printElement({
+                addGlobalStyles : true,
+                font_size: '32pt',
+                gridStyle: 'none',
+                styleToAdd: 'padding:0px;margin:0px;color:red !important; border: none; font-size: 30px'
+            });
+            $('#print-reports').css('display', 'none');
+        });*@
+    $(document).ready(function () {
+        var set = "";
+        var statement = false;
+        console.log(set);
+        $('#submit').on('click', function () {
+            var factoryNumber = $("#FactoryNumber").val();
+            var date = $("#DateToRepair").val();
+            const res = checkIsExisted(date, factoryNumber).then((result) => {
+                if (result === "True") {
+                    statement = true;
+                }
+            });
+            if (statement)
+                return true;
+            else
+                return false;
+        });
+        $(document).on('click', '#submit', function () {
+            if (statement) {
+                setTimeout(reload, 1000);
+            }
+        })
+        function reload() {
+            console.log("reload page");
+            window.location.reload(true);
+        }
+        function checkIsExisted(date, fNumber) {
+            return $.ajax({
+                type: 'get',
+                async: false,
+                url: "../Repair/GetExistedRepair" + "?date=" + date + "&FactoryNumber=" + fNumber,
+                success: function (data) {
+                    console.log(data);
+                    if (data === "True") {
+                        $("#existedRepair").css("display", "none");
+                        if ($('input[name="1"]').is(':checked')) {
+                            set += $('input[name="1"]:checked').val() + "; ";
+                        }
+                        if ($('input[name="3"]').is(':checked')) {
+                            set += "Антенна" + "; ";
+                        }
+                        if ($('input[name="4"]').is(':checked')) {
+                            set += "Кабель питания" + "; ";
+                        }
+                        set += "Кабельные вводы: " + $('input[name="5"]').val() + "; ";
+                        set += "Заглушки кабельных вводов: " + $('input[name="6"]').val() + "; ";
+                        if ($('input[name="7"]').is(':checked')) {
+                            set += "Блок питания" + "; ";
+                        }
+                        console.log(set);
+                        $('#Set').val(set);
+                    }
+                    else {
+                        $("#existedRepair").css("display", "block");
+                    }
+                }
+            });
+        }
+    $('.button8').click(function () {
+        $('.client-select').css("display", "none");
+        $('.client-input').css("display", "block");
+        $(this).css("display", "none");
+    });
+
+    $(".chosen-select").chosen({
+        width: "100%",
+        allow_single_deselect: true
+    });
+    $('.datepicker').datepicker({
+        todayBtn: "linked",
+        language: "ru-RU",
+        format: "dd-mm-yyyy",
+        autoclose: true
+    });
+
+    $('.datepicker').change(function () {
+        var date = $(this).datepicker('getDate');
+        var day = date.getDate();
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        switch (date.getMonth()) {
+            case "0":
+            case "1":
+            case "2":
+            case "3":
+            case "4":
+            case "5":
+            case "6":
+            case "7":
+            case "8":
+                $(this).val(day + ".0" + month + "." + year);
+                break;
+            case "9":
+            case "10":
+            case "11":
+                $(this).val(day + "." + month + "." + year);
+        }
+
+        });
+    });
+</script>
+<style>
+    @@media print {
+        .print {
+            display: block;
+            border: 1px solid black;
+            font-size: 30px;
+        }
+    }
+    #Client_chosen {
+        top: -2px;
+        width: 253px !important;
+    }
+</style>

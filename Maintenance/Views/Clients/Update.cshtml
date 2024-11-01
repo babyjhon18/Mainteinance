@@ -1,0 +1,180 @@
+﻿@model Project.Models.Clients
+@{
+    Layout = null;
+}
+<div class="modal-dialog">
+    <div class="modal-content">
+        @using (Html.BeginForm("Update", "Clients", FormMethod.Post, new { @class = "form-horizontal", @id = "UpdateClientsForm", @role = "form" }))
+        {
+            @Html.HiddenFor(model => model.Id)
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h5 class="modal-title"><i class="fa fa-plus"></i> Редактировать данные клиента</h5>
+            </div>
+            <div class="modal-body">
+                <fieldset>
+                    <legend><i class="fa fa-pencil-square-o"></i> Клиент</legend>
+                    <div class="form-group">
+                        <label for="ClientName" class="col-lg-4 control-label">Наименование</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Наименование" id="ClientName" name="ClientName" value="" required />*@@Html.EditorFor(model => model.Name, new { htmlAttributes = new { @required = true, @class = "form-control", @placeholder = "Наименование" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientAddress" class="col-lg-4 control-label">Адрес</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Адрес" id="ClientAddress" name="ClientAddress" value=" " required/>*@@Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control", @placeholder = "Адрес" } })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ClientCheckingAccount" class="col-lg-4 control-label">Расчетный счет</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Расчетный счет" id="ClientCheckingAccount" name="ClientCheckingAccount" value=" " required/>*@@Html.EditorFor(model => model.CheckingAccount, new { htmlAttributes = new { @pattern = "BY[0-9A-Z]{26}", @class = "form-control", @placeholder = "Расчетный счет" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientBank" class="col-lg-4 control-label">Банк</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Банк" id="ClientBank" name="ClientBank" value=" " required />*@@Html.EditorFor(model => model.Bank, new { htmlAttributes = new { @class = "form-control", @placeholder = "Банк" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientBankAddress" class="col-lg-4 control-label">Адрес банка</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Адрес банка" id="ClientBankAddress" name="ClientBankAddress" value=" " required/>*@@Html.EditorFor(model => model.BankAddress, new { htmlAttributes = new { @class = "form-control", @placeholder = "Адрес банка" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientBIC" class="col-lg-4 control-label">BIC</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="BIC" id="ClientBIC" name="ClientBIC" value="" required/>*@@Html.EditorFor(model => model.BIC, new { htmlAttributes = new { @class = "form-control", @placeholder = "BIC" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientUNP" class="col-lg-4 control-label">УНП</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="УНП" id="ClientUNP" name="ClientUNP" value="" required/>*@@Html.EditorFor(model => model.UNP, new { htmlAttributes = new { @id = "UNP", pattern = "[0-9]{9}", min = "99999999", max = "999999999", @class = "form-control", @placeholder = "УНП" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientOKPO" class="col-lg-4 control-label">ОКПО</label>
+                        <div class="col-lg-8 ">
+                            @*<input type="text" class="form-control" placeholder="ОКПО" id="ClientOKPO" name="ClientOKPO" value=" " required/>*@@Html.EditorFor(model => model.OKPO, new { htmlAttributes = new { @class = "form-control", @placeholder = "ОКПО" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ContractNumber" class="col-lg-4 control-label">Номер договора</label>
+                        <div class="col-lg-8 ">
+                            @*<input type="text" class="form-control" placeholder="Ответственное лицо" id="ClientResponsiblePerson" name="ClientResponsiblePerson" value=" " required/>*@@Html.EditorFor(model => model.ContractNumber, new { htmlAttributes = new { @required = true, @class = "form-control", @placeholder = "Номер последнего договора" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ContractDate" class="col-lg-4 control-label">Дата договора</label>
+                        <div class="col-lg-8 ">
+                            @Html.EditorFor(model => model.ContractDate, new { htmlAttributes = new { @name = "ContractDate", @class = "datepicker", @placeholder = "Дата сдачи в ремонт", @style = "height: 25px;width: 100%;margin-bottom: 5px;", @autocomplete = "off" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientResponsiblePerson" class="col-lg-4 control-label">В лице</label>
+                        <div class="col-lg-8 ">
+                            @*<input type="text" class="form-control" placeholder="Ответственное лицо" id="ClientResponsiblePerson" name="ClientResponsiblePerson" value=" " required/>*@@Html.EditorFor(model => model.RPJobTitle, new { htmlAttributes = new { @required = true, @class = "form-control", @placeholder = "Пример: генерального директора" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientResponsiblePerson" class="col-lg-4 control-label">Ответственное лицо(И.П.)</label>
+                        <div class="col-lg-8 ">
+                            @*<input type="text" class="form-control" placeholder="Ответственное лицо" id="ClientResponsiblePerson" name="ClientResponsiblePerson" value=" " required/>*@@Html.EditorFor(model => model.ResponsiblePerson, new { htmlAttributes = new { @required = true, @class = "form-control", @placeholder = "Ответственное лицо в именительном падеже" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientResponsiblePerson" class="col-lg-4 control-label">Ответственное лицо(Р.П.)</label>
+                        <div class="col-lg-8 ">
+                            @*<input type="text" class="form-control" placeholder="Ответственное лицо" id="ClientResponsiblePerson" name="ClientResponsiblePerson" value=" " required/>*@@Html.EditorFor(model => model.LongResponsiblePerson, new { htmlAttributes = new { @required = true, @class = "form-control", @placeholder = "Ответственное лицо в родительном падеже" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="BasedOnDescription" class="col-lg-4 control-label">Действующего на основании</label>
+                        <div class="col-lg-8 ">
+                            @*<input type="text" class="form-control" placeholder="Ответственное лицо" id="ClientResponsiblePerson" name="ClientResponsiblePerson" value=" " required/>*@@Html.EditorFor(model => model.BasedOnDescription, new { htmlAttributes = new { @required = true, @class = "form-control", @placeholder = "Пример: доверенности/устава "} })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientContactNumber" class="col-lg-4 control-label">Контактный телефон</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Контактный телефон" id="ClientContactNumber" name="ClientContactNumber" value=" " required/>*@@Html.EditorFor(model => model.ContactNumber, new { htmlAttributes = new { @id = "ContactNumber", @class = "form-control", @placeholder = "Контактный телефон" } })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ClientEmail" class="col-lg-4 control-label">Email адрес</label>
+                        <div class="col-lg-8">
+                            @*<input type="text" class="form-control" placeholder="Контактный телефон" id="ClientContactNumber" name="ClientContactNumber" value=" " required/>*@@Html.EditorFor(model => model.Email, new { htmlAttributes = new { @id = "ClientEmail", @class = "form-control", @placeholder = "Email адрес" } })
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Отмена</button>
+                <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-plus"></i> Сохранить изменения</button>
+
+            </div>
+        }
+    </div>
+</div>
+<style>
+    .col-lg-8 {
+        color: black;
+        font-size: 12px;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $(".chosen-select").chosen({
+            width: "100%",
+            allow_single_deselect: true
+        });
+        $('#ContactNumber').mask("+375(99) 999-99-99");
+        $('#UNP').mask("999999999");
+      $("#IsActive")
+        .on("change",
+          function() {
+            if ($(this).is(":checked")) {
+              $(this).val("true");
+            } else {
+              $(this).val("false");
+            }
+          });
+        //$('#Name').on('input', function () {
+        //    $(this).val($(this).val().replace(/"/g, ''));
+        //});
+        $('.datepicker').datepicker({
+            todayBtn: "linked",
+            language: "ru-RU",
+            format: "dd.mm.yyyy",
+            autoclose: true
+        });
+        $('.datepicker').change(function () {
+            var date = $(this).datepicker('getDate');
+            var day = date.getDate();
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            switch (date.getMonth()) {
+                case "0":
+                case "1":
+                case "2":
+                case "3":
+                case "4":
+                case "5":
+                case "6":
+                case "7":
+                case "8":
+                    $(this).val(day + ".0" + month + "." + year);
+                    break;
+                case "9":
+                case "10":
+                case "11":
+                    $(this).val(day + "." + month + "." + year);
+            }
+        });
+    });
+</script>

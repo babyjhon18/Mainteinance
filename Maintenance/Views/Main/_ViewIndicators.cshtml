@@ -1,0 +1,138 @@
+﻿@model Project.Models.IndicatorsClass
+@{
+    Layout = null;
+    int idx = 0;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default" style="margin-bottom: 0px !important">
+            <div class="panel-heading"><h4 class="report_header"><i class="fa fa-cog"></i> Список ремонтников</h4></div>
+            <div class="form-group">
+                <div id="archdata" style="overflow-x:scroll; height: 20vh;">
+                    <table class="table table-bordered table-condensed datatable">
+                        <tbody>
+                            <tr class="toptop">
+                                <th>
+                                </th>
+                                <th style="width: 25% !important;">Наименование</th>
+                                <th style="width: 25% !important;">Должностной оклад</th>
+                                <th style="width: 25% !important;">Средняя норма рабочего времени</th>
+                                <th style="width: 25% !important;">Стоимость 1 часа</th>
+                            </tr>
+                            @foreach (var row in Model.ResponsiblePersonsProperties)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="btn-group super-navi">
+                                            <button class="btn btn-primary dropdown-toggle btn-xs btn-radius" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fa fa-bars"></i>
+                                            </button>
+                                            <ul class="dropdown-menu devdata" value="@row.id">
+                                                <li>
+                                                    <button data-id-device="@row.id" value="Indicator/Create" title="Добавить ремонтника" class="">
+                                                        <i class="fa fa-plus"></i> Новый
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button data-id-device="@row.id" value="Indicator/UpdatePerson" title="Редактировать ремонтника" class="">
+                                                        <i class="fa fa-pencil"></i> Редактировать
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button data-id-device="@row.id" value="Indicator/Delete" title="Удалить ремонтника" class="">
+                                                        <i class="fa fa-times"></i> Удалить
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                    <td>@row.FullName</td>
+                                    <td>@row.sellaryPerMonth</td>
+                                    <td>@row.avgWorkTime</td>
+                                    <td>@row.hourPrice</td>
+
+                                </tr>
+                                }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    @using (Html.BeginForm("Update", "Indicator", FormMethod.Post, new
+    { @class = "form-horizontal", @id = "", @role = "form" }))
+    {
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h4 class="report_header"><i class="fa fa-cog"></i> Показатели</h4></div>
+                <div class="form-group">
+                    <div id="archdata" style="overflow-x:scroll; height:100%">
+                        <table class="table table-bordered table-condensed datatable" style="height:100%">
+                            <tbody>
+                                <tr class="toptop">
+                                    <th style="width: 50% !important;">Наименование</th>
+                                    <th style="width: 50% !important;">Значение</th>
+                                </tr>
+                                @foreach (var row in Model.BaseIndicatorModel)
+                                {
+                                    <tr>
+                                        <td>@row.Description</td>
+                                        <td>
+                                            <div class="form-group col-md-12">
+                                                <div class="col-md-6">
+                                                    <input type="number" step="0.01" class="form-control" value="@row.Value.ToString().Replace(',','.')" style="height: 25px; width: 100%; margin-bottom: 5px;" placeholder="" id="@row.Name" name="@idx" />
+                                                </div>
+                                                <label for="FactoryNumber" style="text-align: left" class="col-md-6">в @row.ValueDescription</label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    idx++;
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div style="margin-bottom: 5px; margin-top: -10px; display: flex; justify-content: center; ">
+                    <button type="submit" class="btn btn-sm btn-primary"><i class="fa fa-save" style="margin-right:3px"></i>Сохранить</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<script>
+    $("button[value='Indicator/Delete']").on('click', function () {
+        var clientId = $(this).attr('data-id-device');
+        $.ajax({
+            type: 'get',
+            url: "../" + $(this).val() + "?id=" + clientId,
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+            }
+        });
+    });
+    $("button[value='Indicator/Create']").on('click', function () {
+        $.ajax({
+            type: 'get',
+            url: "../" + $(this).val(),
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+            }
+        });
+    });
+    $("button[value='Indicator/UpdatePerson']").on('click', function () {
+        var clientId = $(this).attr('data-id-device');
+        $.ajax({
+            type: 'get',
+            url: "../" + $(this).val() + "?id=" + clientId,
+            success: function (data) {
+                $("#modal_dialog").html(data);
+                $("#modal_dialog").modal('show');
+            }
+        });
+    });
+</script>
+
