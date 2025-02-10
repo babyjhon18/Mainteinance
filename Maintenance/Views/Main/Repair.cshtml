@@ -187,6 +187,18 @@
 
 </div>
 <script>
+    //востанавливаем даты на фильтрах
+    const dateFromInput = document.getElementById('Datefrom');
+    const toDateInput = document.getElementById('ToDate');
+    const dateFromValue = sessionStorage.getItem('dateFrom');
+    const toDateValue = sessionStorage.getItem('toDate');
+    if (dateFromValue !== null) {
+        dateFromInput.value = dateFromValue;
+    }
+    if (toDateValue !== null) {
+        toDateInput.value = toDateValue;
+    }
+
     function changeSortDirection() {
         let direction = document.getElementById('sortDirection');
         let i = document.getElementById('sortIcon')
@@ -254,6 +266,8 @@
             });
         }
     }
+
+
     $(document).ready(function () {
         $('body').css('overflow', 'hidden');
         if ('@Session["Key"]' === "") {

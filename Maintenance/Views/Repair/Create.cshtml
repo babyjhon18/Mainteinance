@@ -75,11 +75,10 @@
                     <div class="form-group">
                         <label for="Set" class="col-lg-4 control-label">Комплектность</label>
                         <div class="col-lg-8" style="margin-left: -15px;">
-                            <div class="col-lg-5">
+                            <div class="col-lg-5" style="margin-top: 3px;">
                                 <input type="hidden" class="form-control" placeholder="Комплектность" id="Set" name="Set" />
                                 <input type="radio" name="1" value="В корпусе" style=" margin-right: 10px;" />в корпусе<br />
-                                <input type="radio" name="1" value="Плата" style=" margin-right: 10px; margin-top: 7px;" />плата<br />
-                                <input type="checkbox" name="3" style="margin-right: 10px; margin-top: 7px;" />Антенна<br />
+                                <input type="radio" name="1" value="Плата" style=" margin-right: 10px; margin-top: 18px;" />плата<br />
 
                             </div>
                             <div class="col-lg-7">
@@ -88,12 +87,16 @@
                                     <input type="number" class="form-control" name="5" style="width: 40px;" min="0" max="4" value="0" />
                                 </div>
                                 <div class="row">
-                                    <label for="Defect" class="col-lg-8 control-label" style="margin-top: 3px; margin-right: 4px; width: 120px;text-align: left;">Заглушки кабельных вводов</label>
-                                    <input type="number" class="form-control" name="6" style="width: 40px;" min="0" max="4" value="0" />
+                                    <label for="Defect" class="col-lg-8 control-label" style="margin-top: -5px; margin-right: 4px; width: 120px;text-align: left;">Заглушки кабельных вводов</label>
+                                    <input type="number" class="form-control" name="6" style="width: 40px; margin-top: 7px;" min="0" max="4" value="0" />
                                 </div>
 
                             </div>
-                            <div class="col-lg-12" style="margin-top: -10px;">
+                            <div class="col-lg-12" style="margin-top: -5px; width: max-content; margin-bottom: 15px; ">
+                                <input type="checkbox" name="3" style="margin-right: 10px;" />Антенна<br />
+                                <input type="checkbox" name="8" style="margin-right: 10px;" />Сим-карта<br />
+                            </div>
+                            <div class="col-lg-12" style="margin-top: -5px; padding-left: 0px; width: max-content; ">
                                 <input type="checkbox" name="7" style="margin-right: 10px;" />Блок питания<br />
                                 <input type="checkbox" name="4" style="margin-right: 10px;" />Кабель питания<br />
                             </div>
@@ -103,7 +106,7 @@
                 <div class="form-group">
                     <label for="Note" class="col-lg-4 control-label">Примечание</label>
                     <div class="col-lg-8">
-                        <input type="text" class="form-control" placeholder="Примечание" id="Note" name="Note" />
+                        <textarea type="text" class="form-control" style="height: 25px;" placeholder="Примечание" id="Note" name="Note" />
                     </div>
                     <div id="existedRepair" class="col-lg-12" style="display: none">
                         <label for="Error" style="font-size:initial" class="control-label">Невозможно добавить ремонт, так как он уже существует!</label> 
@@ -177,64 +180,75 @@
             });
             $('#print-reports').css('display', 'none');
         });*@
-    $(document).ready(function () {
-        var set = "";
-        var statement = false;
-        console.log(set);
-        $('#submit').on('click', function () {
-            var factoryNumber = $("#FactoryNumber").val();
-            var date = $("#DateToRepair").val();
-            const res = checkIsExisted(date, factoryNumber).then((result) => {
-                if (result === "True") {
-                    statement = true;
-                }
-            });
-            if (statement)
-                return true;
-            else
-                return false;
-        });
-        $(document).on('click', '#submit', function () {
-            if (statement) {
-                setTimeout(reload, 1000);
+
+$(document).ready(function () {
+    var set = "";
+    var statement = false;
+    console.log(set);
+    $('#submit').on('click', function () {
+        var factoryNumber = $("#FactoryNumber").val();
+        var date = $("#DateToRepair").val();
+        const res = checkIsExisted(date, factoryNumber).then((result) => {
+            if (result === "True") {
+                statement = true;
             }
-        })
-        function reload() {
-            console.log("reload page");
-            window.location.reload(true);
+        });
+        if (statement)
+            return true;
+        else
+            return false;
+    });
+    $(document).on('click', '#submit', function () {
+        if (statement) {
+            setTimeout(reload, 1000);
         }
-        function checkIsExisted(date, fNumber) {
-            return $.ajax({
-                type: 'get',
-                async: false,
-                url: "../Repair/GetExistedRepair" + "?date=" + date + "&FactoryNumber=" + fNumber,
-                success: function (data) {
-                    console.log(data);
-                    if (data === "True") {
-                        $("#existedRepair").css("display", "none");
-                        if ($('input[name="1"]').is(':checked')) {
-                            set += $('input[name="1"]:checked').val() + "; ";
-                        }
-                        if ($('input[name="3"]').is(':checked')) {
-                            set += "Антенна" + "; ";
-                        }
-                        if ($('input[name="4"]').is(':checked')) {
-                            set += "Кабель питания" + "; ";
-                        }
-                        set += "Кабельные вводы: " + $('input[name="5"]').val() + "; ";
-                        set += "Заглушки кабельных вводов: " + $('input[name="6"]').val() + "; ";
-                        if ($('input[name="7"]').is(':checked')) {
-                            set += "Блок питания" + "; ";
-                        }
-                        console.log(set);
-                        $('#Set').val(set);
+    })
+    function reload() {
+        console.log("reload page");
+        window.location.reload(true);
+    }
+    $('#Note').on('focus', function () {
+        $('#Note').css({ 'height': '80px', 'font-size': "16px" });
+    });
+    $('#Note').on('blur', function () {
+        $('#Note').css({ 'height': '25px', 'font-size': "12px" });
+    });
+    
+    function checkIsExisted(date, fNumber) {
+        return $.ajax({
+            type: 'get',
+            async: false,
+            url: "../Repair/GetExistedRepair" + "?date=" + date + "&FactoryNumber=" + fNumber,
+            success: function (data) {
+                console.log(data);
+                if (data === "True") {
+                    $("#existedRepair").css("display", "none");
+                    if ($('input[name="1"]').is(':checked')) {
+                        set += $('input[name="1"]:checked').val() + "; ";
                     }
-                    else {
-                        $("#existedRepair").css("display", "block");
+                    if ($('input[name="3"]').is(':checked')) {
+                        set += "Антенна" + "; ";
                     }
+                    if ($('input[name="4"]').is(':checked')) {
+                        set += "Кабель питания" + "; ";
+                    }
+                    if ($('input[name="8"]').is(':checked')) {
+                        set += "Сим-карта" + "; ";
+                    }
+                    set += "Кабельные вводы: " + $('input[name="5"]').val() + "; ";
+                    set += "Заглушки кабельных вводов: " + $('input[name="6"]').val() + "; ";
+                    if ($('input[name="7"]').is(':checked')) {
+                        set += "Блок питания" + "; ";
+                    }
+                    console.log(set);
+                    $('#Set').val(set);
                 }
-            });
-        }
+                else {
+                    $("#existedRepair").css("display", "block");
+                }
+            }
+        });
+    }
     $('.button8').click(function () {
         $('.client-select').css("display", "none");
         $('.client-input').css("display", "block");
