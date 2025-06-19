@@ -1,7 +1,9 @@
 ﻿@model Project.Models.IndicatorsClass
+
 @{
     ViewBag.Title = "Показатели";
 }
+
 <div class="blog-masthead">
     <nav class="navbar navbar-default navbar-fixed-top blog-nav" role="navigation">
         <div class="container-fluid" id="navfluid">
@@ -18,17 +20,38 @@
         <!-- /.container-fluid -->
     </nav>
 </div>
-<div class="modal" id="modal_dialog">
 
-</div>
 <div class="clearfix"></div>
-<div class="row full-height">
-    <div class="col-sm-12 col-md-12 reports">
-        <div class="row placeholders main-content">
-            <div id="reportData" class="panel-body" style="margin-top: 0;">
-                @Html.Partial("_ViewIndicators", Model)
+
+@if (ViewBag.IsAuthenticated == false)
+{
+    // Если аутентификация не удалась, выводим сообщение
+    <div class="alert alert-danger">Неверный пароль. Попробуйте снова.</div>
+}
+
+@if (ViewBag.IsAuthenticated == null || ViewBag.IsAuthenticated == false)
+{
+    <div class="container" style=" margin-top: 20px;">
+        <form method="post" action="@Url.Action("Indicators")">
+            <label for="password" style="font-size:16px">Введите пароль:</label>
+            <div class="form-group">
+                <input style="width: 250px; height:30px; display: inline-block; " type="password" id="password" name="password" class="form-control" required />
+                <button style="font-size: 12px; margin-bottom: 2px;" type="submit" class="btn btn-primary btn-sm">Подтвердить</button>
+            </div>
+        </form>
+    </div>
+}
+else
+{
+    // Здесь отображаем данные, если пароль введен верно
+    <div class="row full-height">
+        <div class="col-sm-12 col-md-12 reports">
+            <div class="row placeholders main-content">
+                <div id="reportData" class="panel-body" style="margin-top: 0;">
+                    @Html.Partial("_ViewIndicators", Model)
+                </div>
             </div>
         </div>
     </div>
-</div>
-
+    <div class="modal" id="modal_dialog"></div>
+}

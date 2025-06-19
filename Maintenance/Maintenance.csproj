@@ -239,10 +239,6 @@
     <Compile Include="ViewModels\RepairViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\DataBase.mdf" />
-    <Content Include="App_Data\DataBase_log.ldf">
-      <DependentUpon>DataBase.mdf</DependentUpon>
-    </Content>
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />

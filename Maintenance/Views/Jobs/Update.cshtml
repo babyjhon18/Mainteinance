@@ -23,7 +23,7 @@
                     <div class="form-group">
                         <label for="JobTime" class="col-lg-4 control-label">Норма времени</label>
                         <div class="col-lg-8">
-                            @Html.EditorFor(model => model.NormsOfTime, new { htmlAttributes = new { @required = true, @class = "form-control", @placeholder = "Норма времени" } })
+                            @Html.EditorFor(model => model.NormsOfTime, new { htmlAttributes = new { @required = true, @class = "form-control", @placeholder = "Норма времени", @type = "number", @step = "0.01" } })
                         </div>
                     </div>
                 </fieldset>
@@ -48,7 +48,12 @@
             width: "100%",
             allow_single_deselect: true
         });
+
+        var normsoftime = "@Model.NormsOfTime" ;
+        $('#NormsOfTime').val(normsoftime.replace(',', '.'));
+
         $('#ContactNumber').mask("+375(99) 999-99-99");
+
       $("#IsActive")
         .on("change",
           function() {

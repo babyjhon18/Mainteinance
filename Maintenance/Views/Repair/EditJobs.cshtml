@@ -16,25 +16,30 @@
                 <div id="JobsBlock" class="form-group">
                     <label class="col-lg-4 control-label">Выполненные работы</label>
                     <i id="addJob" style="margin-left:10px; cursor: pointer" class="fa fa-plus"></i>
-                    @foreach (var job in ViewBag.Jobs.Split(','))
+                    @if (ViewBag.Jobs != null && !string.IsNullOrEmpty(ViewBag.Jobs.ToString()))
                     {
-                        <div class="col-lg-8" style="margin-bottom: 5px; float: right;">
-                            <select data-placeholder="Выполненные работы" id="Jobs" name="Jobs" style="width:92% !important">
-                                @foreach (var i in Model.Jobs)
-                                {
-                                    if (@i.Id == Convert.ToInt32(job))
+                        foreach (var job in ViewBag.Jobs.Split(','))
+                        {
+                            <div class="col-lg-8" style="margin-bottom: 5px; float: right;">
+                                <select data-placeholder="Выполненные работы" id="Jobs" name="Jobs" style="width:92% !important">
+                                    @foreach (var i in Model.Jobs)
                                     {
-                                        <option id="@i.Id" value="@i.Id" selected>@i.Name</option>
+                                        if (i.Id == Convert.ToInt32(job))
+                                        {
+                                            <option id="@i.Id" value="@i.Id" selected>@i.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option id="@i.Id" value="@i.Id">@i.Name</option>
+                                        }
                                     }
-                                    else
-                                    {
-                                        <option id="@i.Id" value="@i.Id">@i.Name</option>
-                                    }
-                                }
-                            </select>
-                            <i class="deleteJob fa fa-trash" style="margin-top: 3px; float:right; cursor: pointer"></i>
-                        </div>
+                                </select>
+                                <i class="deleteJob fa fa-trash" style="margin-top: 3px; float:right; cursor: pointer"></i>
+                            </div>
+                        }
                     }
+                    else
+                    {}
                 </div>
                 <div id="MaterialsBlock" class="form-group">
                     <label class="col-lg-4 control-label">Использованные материалы</label>

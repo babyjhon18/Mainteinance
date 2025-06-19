@@ -27,5 +27,7 @@ namespace Project.Models
         public bool Deleted { get; set; }
         public string ContactPerson { get; set; }
         public int ResponsiblePersonId { get; set; }
+        public DateTime Deadline { get; set; }
+
     }
 }

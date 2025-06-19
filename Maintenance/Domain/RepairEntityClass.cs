@@ -54,6 +54,7 @@ namespace Project.Domain
             var fieldValues = new Dictionary<string, string>();
             var clientid = 0;
             var dateToRepair = collection["DateToRepair"].ToString();
+            var deadline = collection["Deadline"].ToString();
             if (collection["NewClient"].ToString() != "")
             {
                 Clients client = new Clients
@@ -78,6 +79,7 @@ namespace Project.Domain
                 Status = "accepted",
                 ContactPerson = collection["ContactPerson"].ToString(),
                 Note = collection["Note"],
+                Deadline = Convert.ToDateTime(deadline),
             };
             var existedRepair = dataBase.Repairs.ToList()
                 .Where(r => r.FactoryNumber == collection["FactoryNumber"].ToString() &&

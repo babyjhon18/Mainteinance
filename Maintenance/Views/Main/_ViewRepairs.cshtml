@@ -35,175 +35,199 @@
                         <th style="width: 25% !important">Примечания</th>
                         <th style="width: 15% !important">Дата возврата заказчику</th>
                     </tr>
-                        @foreach (var row in Model)
+                    @foreach (var row in Model)
+                    {
+                        if (!row.Deleted)
+                        {
+                            var isAlert = (row.DateToClient == DateTime.MinValue && row.Jobs == null && row.Deadline < DateTime.Now);
+                            var isWarning = (row.DateToClient == DateTime.MinValue && row.Deadline < DateTime.Now) && !isAlert;
+                            var classes = "table-item";
+
+                            if (isAlert)
                             {
-                            if(!row.Deleted)
+                                classes += " alert-row";
+                            }
+                            else if (isWarning)
                             {
-                                <tr id="@row.Id" class="table-item">
-                                    <td>
-                                        <div>
-                                            @if (row.Status != "accepted" || row.Status == "ready")
+                                classes += " warning-row";
+                            }
+
+                            <tr id="@row.Id" class="@classes" style="background-color: @(isAlert ? "red" : isWarning ? "orange" : "");">
+                                <td>
+                                    <div>
+                                        @if (row.Status != "accepted" || row.Status == "ready")
+                                        {
+                                            <input repairId="@row.Id" name="repair" style="float: left; margin-left: 3px" type="checkbox" />
+                                        }
+                                    </div>
+                                    <div style="margin-top: 20px">
+                                        <i style="display:none; color: mediumseagreen;" class="fa fa-file @row.Acct"></i>
+                                    </div>
+                                </td>
+                                <td>
+
+                                    <div class="btn-group super-navi">
+                                        <button id="button+@row.Id" class="btn btn-primary dropdown-toggle btn-xs btn-radius @row.Status" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fa fa-bars"></i>
+                                        </button>
+                                        <ul class="dropdown-menu devdata" value="@row.Id">
+                                            @if (row.Status == "ready")
                                             {
-                                                <input repairId="@row.Id" name="repair" style="float: left; margin-left: 3px" type="checkbox" />
+                                                <li>
+                                                    <button data-id-device="@row.Id" status="@row.Status" value="Repair/EditJobs" title="Выполненные работы" class="">
+                                                        <i class="fa fa-pencil"></i> Выполненные работы
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button data-id-device="@row.Id" value="Repair/Return" title="Возврат заказа " class="">
+                                                        <i class="fa fa-pencil"></i> Возврат заказа
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button data-id-device="@row.Id" data-id-product="@row.ProductId.ToString()" value="Repair/Acct" title="Выставить счет " class="">
+                                                        <i class="fa fa-file"></i> Выставить счет
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button data-id-device="@row.Id" value="Repair/Edit" title="Изменить" class="">
+                                                        <i class="fa fa-pencil"></i> Изменить
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button data-id-device="@row.Id" status="@row.Status" value="Repair/Delete" title="Удалить ремонт" class="">
+                                                        <i class="fa fa-close"></i> Удалить ремонт
+                                                    </button>
+                                                </li>
                                             }
-                                        </div>
-                                        <div style="margin-top: 20px">
-                                            <i style="display:none; color: mediumseagreen;" class="fa fa-file @row.Acct"></i>
-                                        </div>
-                                    </td>
-                                    <td>
-
-                                        <div class="btn-group super-navi">
-                                            <button id="button+@row.Id" class="btn btn-primary dropdown-toggle btn-xs btn-radius @row.Status" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="fa fa-bars"></i>
-                                            </button>
-                                            <ul class="dropdown-menu devdata" value="@row.Id">
-                                                @if (row.Status == "ready")
-                                                {
-                                                    <li>
-                                                        <button data-id-device="@row.Id" status="@row.Status" value="Repair/EditJobs" title="Выполненные работы" class="">
-                                                            <i class="fa fa-pencil"></i> Выполненные работы
-                                                        </button>
-                                                    </li>
-                                                    <li>
-                                                        <button data-id-device="@row.Id" value="Repair/Return" title="Возврат заказа " class="">
-                                                            <i class="fa fa-pencil"></i> Возврат заказа
-                                                        </button>
-                                                    </li>
-                                                    <li>
-                                                        <button data-id-device="@row.Id" data-id-product="@row.ProductId.ToString()" value="Repair/Acct" title="Выставить счет " class="">
-                                                            <i class="fa fa-file"></i> Выставить счет
-                                                        </button>
-                                                    </li>
-                                                    <li>
-                                                        <button data-id-device="@row.Id" value="Repair/Edit" title="Изменить" class="">
-                                                            <i class="fa fa-pencil"></i> Изменить
-                                                        </button>
-                                                    </li>
-                                                    <li>
-                                                        <button data-id-device="@row.Id" status="@row.Status" value="Repair/Delete" title="Удалить ремонт" class="">
-                                                            <i class="fa fa-close"></i> Удалить ремонт
-                                                        </button>
-                                                    </li>
-                                                }
-                                                @if (row.Status == "accepted")
-                                                {
-                                                    <li>
-                                                        <button data-id-device="@row.Id" data-id-product="@row.ProductId.ToString()" status="@row.Status" value="Repair/Update" title="Выполненные работы" class="">
-                                                            <i class="fa fa-pencil"></i> Выполненные работы
-                                                        </button>
-                                                    </li>
-                                                    <li>
-                                                        <button data-id-device="@row.Id" value="Repair/Edit" title="Изменить" class="">
-                                                            <i class="fa fa-pencil"></i> Изменить
-                                                        </button>
-                                                    </li>
-                                                    <li>
-                                                        <button data-id-device="@row.Id" status="@row.Status" value="Repair/Delete" title="Удалить ремонт" class="">
-                                                            <i class="fa fa-close"></i> Удалить ремонт
-                                                        </button>
-                                                    </li>
-                                                }
-                                                @if (row.Status == "inprogress")
-                                                {
-                                                    <li>
-                                                        <button data-id-device="@row.Id" data-id-product="@row.ProductId.ToString()" status="@row.Status" value="Repair/EditJobs" title="Выполненные работы" class="">
-                                                            <i class="fa fa-pencil"></i> Выполненные работы
-                                                        </button>
-                                                    </li>
-                                                    <li>
-                                                        <button data-id-device="@row.Id" value="Repair/Return" title="Возврат заказа " class="">
-                                                            <i class="fa fa-pencil"></i> Возврат заказа
-                                                        </button>
-                                                    </li>
-                                                    <li>
-                                                        <button data-id-device="@row.Id" value="Repair/Acct" title="Выставить счет " class="">
-                                                            <i class="fa fa-file"></i> Выставить счет
-                                                        </button>
-                                                    </li>
-                                                    <li>
-                                                        <button data-id-device="@row.Id" data-id-product="@row.ProductId.ToString()" value="Repair/Edit" title="Выставить счет " class="">
-                                                            <i class="fa fa-file-text"></i> Изменить примечание
-                                                        </button>
-                                                    </li>
-                                                    <li>
-                                                        <button data-id-device="@row.Id" status="@row.Status" value="Repair/Delete" title="Удалить ремонт" class="">
-                                                            <i class="fa fa-close"></i> Удалить ремонт
-                                                        </button>
-                                                    </li>
-                                                }
-                                            </ul>
-                                        </div>
-                                    </td>
-                                    <td>@i</td>
-
-                                    <td>
-                                        @{var client = dataBase.Clients.Where(p => p.Id == row.ClientId).Select(p => p.Name).FirstOrDefault();
-                                            @client
-                                        }
-                                    </td>
-                                    <td>@row.ContactPerson</td>
-                                    <td>
-                                        @{
-                                            var product = dataBase.Products.Where(p => p.Id == row.ProductId).Select(p => p.Name).FirstOrDefault();
-                                            @product;
-                                        }
-                                    </td>
-                                    <td>@row.FactoryNumber</td>
-                                    <td>@(row.DateToRepair.ToShortDateString() == DateTime.MinValue.ToShortDateString() ? "" : row.DateToRepair.ToShortDateString())</td>
-                                    <td>
-                                        @{
-                                            var repsponsible = dataBase.ResponsiblePersonsProperties.Where(p => p.id == row.ResponsiblePersonId).Select(p => p.FullName).FirstOrDefault();
-                                            @repsponsible;
-                                        }
-                                    </td>
-                                    <td>@row.Defect</td>
-                                    <td>@row.Set</td>
-                                    <td>
-                                        @{
-                                            var job = row.Jobs != null ? row.Jobs : "";
-                                            var material = row.Materials != null ? row.Materials : "";
-                                            foreach (var item in job.Split(','))
+                                            @if (row.Status == "accepted")
                                             {
-                                                if (item != "")
+                                                <li>
+                                                    <button data-id-device="@row.Id" data-id-product="@row.ProductId.ToString()" status="@row.Status" value="Repair/Update" title="Выполненные работы" class="">
+                                                        <i class="fa fa-pencil"></i> Выполненные работы
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button data-id-device="@row.Id" value="Repair/Edit" title="Изменить" class="">
+                                                        <i class="fa fa-pencil"></i> Изменить
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button data-id-device="@row.Id" status="@row.Status" value="Repair/Delete" title="Удалить ремонт" class="">
+                                                        <i class="fa fa-close"></i> Удалить ремонт
+                                                    </button>
+                                                </li>
+                                            }
+                                            @if (row.Status == "inprogress")
+                                            {
+                                                <li>
+                                                    <button data-id-device="@row.Id" data-id-product="@row.ProductId.ToString()" status="@row.Status" value="Repair/EditJobs" title="Выполненные работы" class="">
+                                                        <i class="fa fa-pencil"></i> Выполненные работы
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button data-id-device="@row.Id" value="Repair/Return" title="Возврат заказа " class="">
+                                                        <i class="fa fa-pencil"></i> Возврат заказа
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button data-id-device="@row.Id" value="Repair/Acct" title="Выставить счет " class="">
+                                                        <i class="fa fa-file"></i> Выставить счет
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button data-id-device="@row.Id" data-id-product="@row.ProductId.ToString()" value="Repair/Edit" title="Выставить счет " class="">
+                                                        <i class="fa fa-file-text"></i> Изменить примечание
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button data-id-device="@row.Id" status="@row.Status" value="Repair/Delete" title="Удалить ремонт" class="">
+                                                        <i class="fa fa-close"></i> Удалить ремонт
+                                                    </button>
+                                                </li>
+                                            }
+                                            @if (row.Status == "returned")
+                                            {
+                                                <li>
+                                                    <button data-id-device="@row.Id" value="Repair/Return" title="Возврат заказа " class="">
+                                                        <i class="fa fa-pencil"></i> Возврат заказа
+                                                    </button>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td>@i</td>
+
+                                <td>
+                                    @{var client = dataBase.Clients.Where(p => p.Id == row.ClientId).Select(p => p.Name).FirstOrDefault();
+                                        @client
+                                    }
+                                </td>
+                                <td>@row.ContactPerson</td>
+                                <td>
+                                    @{
+                                        var product = dataBase.Products.Where(p => p.Id == row.ProductId).Select(p => p.Name).FirstOrDefault();
+                                        @product;
+                                    }
+                                </td>
+                                <td>@row.FactoryNumber</td>
+                                <td>
+                                    @(row.DateToRepair.ToShortDateString() == DateTime.MinValue.ToShortDateString() ? "" : row.DateToRepair.ToShortDateString())<br><br>
+                                    Крайняя дата ремонта: @row.Deadline.ToShortDateString()
+                                </td>
+                                <td>
+                                    @{
+                                        var repsponsible = dataBase.ResponsiblePersonsProperties.Where(p => p.id == row.ResponsiblePersonId).Select(p => p.FullName).FirstOrDefault();
+                                        @repsponsible;
+                                    }
+                                </td>
+                                <td>@row.Defect</td>
+                                <td>@row.Set</td>
+                                <td>
+                                    @{
+                                        var job = row.Jobs != null ? row.Jobs : "";
+                                        var material = row.Materials != null ? row.Materials : "";
+                                        foreach (var item in job.Split(','))
+                                        {
+                                            if (item != "")
+                                            {
+                                                int value = Convert.ToInt32(item.ToString());
+                                                var jb = dataBase.Jobs.Where(p => p.Id == value).Select(p => p.Name).FirstOrDefault();
+                                                @jb
+                                                <br />
+                                            }
+                                        }
+                                        foreach (var item in material.Split(','))
+                                        {
+                                            if (item != "")
+                                            {
+                                                try
                                                 {
-                                                    int value = Convert.ToInt32(item.ToString());
-                                                    var jb = dataBase.Jobs.Where(p => p.Id == value).Select(p => p.Name).FirstOrDefault();
-                                                    @jb
+                                                    int accessoryID = Convert.ToInt32(item.ToString());
+                                                    var productItem =
+                                                        dataBase.Materials
+                                                        .Where(p => p.ProductId == row.ProductId &&
+                                                        p.AccessoryId == accessoryID).FirstOrDefault();
+                                                    if (productItem != null)
+                                                    {
+                                                        var acc = dataBase.Accessories.Where(a => a.Id == productItem.AccessoryId).
+                                                            Select(p => p.Name).FirstOrDefault();
+                                                        @acc
+                                                    }
                                                     <br />
                                                 }
-                                            }
-                                            foreach (var item in material.Split(','))
-                                            {
-                                                if (item != "")
-                                                {
-                                                    try
-                                                    {
-                                                        int accessoryID = Convert.ToInt32(item.ToString());
-                                                        var productItem =
-                                                            dataBase.Materials
-                                                            .Where(p => p.ProductId == row.ProductId &&
-                                                            p.AccessoryId == accessoryID).FirstOrDefault();
-                                                        if (productItem != null)
-                                                        {
-                                                            var acc = dataBase.Accessories.Where(a => a.Id == productItem.AccessoryId).
-                                                                Select(p => p.Name).FirstOrDefault();
-                                                            @acc
-                                                        }
-                                                        <br />
-                                                    }
-                                                    catch { }
-                                                }
+                                                catch { }
                                             }
                                         }
-                                    </td>
-                                    <td>@row.Note</td>
-                                    <td>@(row.DateToClient.ToShortDateString() == DateTime.MinValue.ToShortDateString() ? "" : row.DateToClient.ToShortDateString())</td>
-                                </tr>
+                                    }
+                                </td>
+                                <td>@row.Note</td>
+                                <td>@(row.DateToClient.ToShortDateString() == DateTime.MinValue.ToShortDateString() ? "" : row.DateToClient.ToShortDateString())</td>
+                            </tr>
 
-                                i++;
-                            }
+                            i++;
                         }
+                    }
                 </table>
             </div>
         </div>
@@ -302,6 +326,8 @@
         });
     });
 
+    
+   
 </script>
 <style>
     .accepted {

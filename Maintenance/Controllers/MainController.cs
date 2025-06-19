@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Net;
+using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
 using Project.Domain;
@@ -119,8 +122,25 @@ namespace Project.Controllers
 
         public ActionResult Indicators()
         {
-            IndicatorsClass indicators = mainEntity.GetResponsiblePersonProperties();
-            return View(indicators);
+            if (Request.HttpMethod == "POST")
+            {
+                string enteredPassword = Request.Form["password"];
+                string correctPassword = ConfigurationManager.AppSettings["Indicator"];
+
+                if (enteredPassword != correctPassword)
+                {
+                    ViewBag.IsAuthenticated = false;
+                    return View(); // Показать форму повторно с сообщением об ошибке
+                }
+                else {
+                    // Если пароль верный, получаем данные
+                    IndicatorsClass indicators = mainEntity.GetResponsiblePersonProperties();
+                    ViewBag.IsAuthenticated = true;
+                    // Возвращаем вид
+                    return View(indicators);
+                }
+            }
+            return View();
         }
 
         public ActionResult _ViewIndicators()

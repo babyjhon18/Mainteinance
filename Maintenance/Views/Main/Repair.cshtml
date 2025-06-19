@@ -49,10 +49,10 @@
             <div class="input-group hidden-xs col-xs-12" style="max-width: 1300px; float:left">
                 <button value="Repair/Create" title="Добавить клиента" class="btn btn-sm btn-primary col-xs-12"><i class="fa fa-plus"></i>Добавить</button>
                 <span>
-                    <input style="max-width: 135px" value="@Session["dateFrom"]" onchange="onChangeFilters()" class="datepicker form-control" autocomplete="off" data-provide="datepicker" placeholder="Начало периода" id="Datefrom" name="Datefrom" />
+                    <input style="max-width: 135px" value="@Session["dateFrom"]" class="datepicker form-control" autocomplete="off" data-provide="datepicker" placeholder="Начало периода" id="Datefrom" name="Datefrom" />
                 </span>
                 <span>
-                    <input style="max-width: 135px" value="@Session["toDate"]" onchange="onChangeFilters()" class="datepicker form-control" autocomplete="off" data-provide="datepicker" placeholder="Конец периода" id="ToDate" name="ToDate" />
+                    <input style="max-width: 135px" value="@Session["toDate"]" class="datepicker form-control" autocomplete="off" data-provide="datepicker" placeholder="Конец периода" id="ToDate" name="ToDate" />
                 </span>
                 <span>
                     <select style="max-width: 135px; border-radius: 0px" id="SelectedSort" onchange="onChangeFilters()" class="form-control">
@@ -113,10 +113,13 @@
                             <option value="6">Статусу</option>
                         }
                     </select>
-                    <button id="sortDirection" onclick="changeSortDirection()" value="true" style="background-color: transparent; border-color: #337AB7" title="По возрастанию" 
-                                    class="btn btn-sm btn-primary-outline"><i id="sortIcon" style="height: 30px; width:30px" class="bi bi-sort-up"></i></button>
-                    <button id="filters" value="false" onclick="filterClick()" title="Применить фильтры" style="background-color: #337AB7; 
-                                border-color: #337AB7;" class="btn btn-sm btn-primary">Применить фильтры</button>
+                    <button id="sortDirection" onclick="changeSortDirection()" value="true" style="background-color: transparent; border-color: #337AB7" title="По возрастанию"
+                            class="btn btn-sm btn-primary-outline">
+                        <i id="sortIcon" style="height: 30px; width:30px" class="bi bi-sort-up"></i>
+                    </button>
+                    <button id="filters" value="false" onclick="filterClick()" title="Применить фильтры" style="background-color: #337AB7;
+                                border-color: #337AB7;" class="btn btn-sm btn-primary">Применить фильтры
+                    </button>
                 </span>
                 <span>
                     <input style="max-width: 180px" id="myInputSearch" onended="" onkeyup="ifWritten(this.value)" type="search" value="@Session["Key"]" class="form-control" aria-label="..." placeholder="Введите запрос для поиска...">
@@ -167,6 +170,10 @@
                 <button id="search_" value="Repair/Search" title="Найти" class="btn btn-sm btn-primary col-xs-6" disabled="disabled"><i class="fa fa-plus"></i> Найти</button>
                 <!-- /btn-group -->
             </div><!-- /input-group -->
+            <div style=" display: flex;">
+                <div class="pulse-circle">!</div>
+                <div class="triangle">!</div>
+            </div>
         </div>
 
     </div>
@@ -231,6 +238,8 @@
                     "&toDate=" + "" + "&selectedSort=" + 5 + "&sortDirection=" + true,
                 success: function (data) {
                     $("#reportData").html(data);
+                    togglePulseCircle();
+                    togglePulseTriangle();
                 }
             });
         }
@@ -242,6 +251,8 @@
                     "&toDate=" + toDate + "&selectedSort=" + sortFilter + "&sortDirection=" + sortDirection,
                 success: function (data) {
                     $("#reportData").html(data);
+                    togglePulseCircle();
+                    togglePulseTriangle();
                 }
             });
         }
@@ -262,6 +273,8 @@
                     "&toDate=" + toDate + "&selectedSort=" + sortFilter + "&sortDirection=" + sortDirection,
                 success: function (data) {
                     $("#reportData").html(data);
+                    togglePulseCircle();
+                    togglePulseTriangle();
                 }
             });
         }
@@ -282,35 +295,29 @@
         if ($('input[type="checkbox"]').attr("checked") == 'checked') {
         $("button[value='Repair/MainAcct']").css('display', 'block');
         }
-        $('.datepicker').datepicker({
-            todayBtn: "linked",
-            language: "ru-RU",
-            format: "dd.mm.yyyy",
-            autoclose: true
-        });
+        $(document).ready(function () {
+            $('.datepicker').datepicker({
+                todayBtn: "linked",
+                language: "ru",
+                format: "dd.mm.yyyy",
+                autoclose: true
+            }).on('changeDate', function (e) {
+                var date = e.date;
+                if (!date) return;
 
-        $('.datepicker').change(function () {
-                var date = $(this).datepicker('getDate');
                 var day = date.getDate();
-                var year = date.getFullYear();
                 var month = date.getMonth() + 1;
-                switch (date.getMonth()) {
-                    case "0":
-                    case "1":
-                    case "2":
-                    case "3":
-                    case "4":
-                    case "5":
-                    case "6":
-                    case "7":
-                    case "8":
-                    $(this).val(day + ".0" + month + "." + year);
-                        break;
-                    case "9":
-                    case "10":
-                    case "11":
-                    $(this).val(day + "." + month + "." + year);
-                }
+                var year = date.getFullYear();
+
+                // Форматируем с ведущими нулями
+                var formattedDay = day < 10 ? "0" + day : day;
+                var formattedMonth = month < 10 ? "0" + month : month;
+
+                // Обновляем значение поля
+                $(this).val(formattedDay + "." + formattedMonth + "." + year);
+
+                onChangeFilters();
+            });
         });
 
         $("button[value='Repair/Search']").on('click', function () {
@@ -329,6 +336,8 @@
                     + sortFilter + "&sortDirection=" + sortDirection,
                 success: function (data) {
                     $("#reportData").html(data);
+                    togglePulseCircle();
+                    togglePulseTriangle();
                 }
             });
         });
@@ -389,5 +398,126 @@
         $("#modal_dialog").modal('hide');
             });
 
-        });
+    });
+    $(document).on('click', '.pulse-circle', function () {
+        if ($(this).data('filtered')) {
+            // Сброс фильтра
+            $('table tbody tr').show();
+            $(this).data('filtered', false);
+        } else {
+            // Фильтрация
+            $('table tbody tr').each(function () {
+                if ($(this).hasClass('alert-row') || $(this).hasClass('toptop')) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+            $(this).data('filtered', true);
+        }
+        togglePulseCircle();
+    });
+
+    $(document).on('click', '.triangle', function () {
+        if ($(this).data('filtered')) {
+            // Сброс фильтра
+            $('table tbody tr').show();
+            $(this).data('filtered', false);
+        } else {
+            // Фильтрация
+            $('table tbody tr').each(function () {
+                if ($(this).hasClass('warning-row') || $(this).hasClass('toptop')) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+            $(this).data('filtered', true);
+        }
+        togglePulseTriangle();
+    });
+
+    // функции toggle для отображения элементов в зависимости от фильтрации
+    function togglePulseCircle() {
+        console.log('togglePulseCircle')
+        if ($('table tbody tr.alert-row').length > 0) {
+            $('.pulse-circle').show();
+        } else {
+            $('.pulse-circle').hide();
+        }
+    }
+
+    function togglePulseTriangle() {
+        console.log('togglePulseTriangle')
+
+        if ($('table tbody tr.warning-row').length > 0) {
+            $('.triangle').show();
+        } else {
+            $('.triangle').hide();
+        }
+    }
+
+    $(document).ready(function () {
+        // Проверяем состояние фильтров при загрузке
+        togglePulseCircle();
+        togglePulseTriangle();
+    });
 </script>
+<style>
+    .pulse-circle {
+        width: 20px;
+        height: 20px;
+        background-color: red;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        animation: pulse 2s infinite;
+        margin-top: 3px;
+        cursor: pointer;
+    }
+    @@keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7);
+    }
+    70% {
+      box-shadow: 0 0 0 20px rgba(255, 0, 0, 0);
+    }
+    100% {
+      box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+    }
+    }
+
+    .triangle {
+        width: 0;
+        height: 0;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-bottom: 20px solid orange;
+        display: flex;
+        justify-content: center;
+        cursor: pointer;
+        position: relative;
+        margin-top: 3px;
+        margin-left: 30px;
+        animation: pulse-triangle 2s infinite;
+        color: white;
+        /* удалите box-shadow, чтобы избежать квадратно-форматного эффекта */
+    }
+
+/* Анимация пульсации */
+    @@keyframes pulse-triangle {
+        0% {
+            transform: scale(1);
+        }
+
+        70% {
+            transform: scale(1.1);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+    }
+</style>
